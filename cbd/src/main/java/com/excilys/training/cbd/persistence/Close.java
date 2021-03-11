@@ -1,8 +1,11 @@
 package com.excilys.training.cbd.persistence;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-public class ConnectionToDatabase {
+public class Close {
 
 	/* Fermeture silencieuse du resultset */
 	public static void fermetureSilencieuse( ResultSet resultSet ) {
@@ -49,5 +52,5 @@ public class ConnectionToDatabase {
 	    fermetureSilencieuse( statement );
 	    fermetureSilencieuse( connexion );
 	}
-
+	
 }
