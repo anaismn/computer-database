@@ -1,37 +1,17 @@
 package com.excilys.training.cbd.model;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class Computer {
 
-	String name;
-	String introduced = null;
-	String discontinued = null;
-	Long company_id;
+	private String name = "";
+	private String introduced = "";
+	private String discontinued = "";
+	private Long company_id;
 	
-	
-	public Computer() {}
-	
-	public Computer( String name, Date introduced, Date discontinued, Long company_id) {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		this.name = name;
-		this.company_id = company_id;
-		if(introduced != null) {
-			this.introduced = dateFormat.format(introduced);
-		}
-		
-		if(discontinued != null) {
-			this.discontinued = dateFormat.format(discontinued);
-		}
-	}
-	
-	public String toString() {
-		return "name : "+name+
-				" - introduced : "+introduced+
-				" - discontinued : "+discontinued+
-				" company id : "+company_id;
+	private Computer(Builder builder) {
+		this.name = builder.name;
+		this.introduced = builder.introduced;
+		this.discontinued = builder.discontinued;
+		this.company_id = builder.company_id;
 	}
 	
 	public String getName() {
@@ -49,4 +29,66 @@ public class Computer {
 	public Long getCompanyID() {
 		return company_id;
 	}
+	
+	//setters
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setIntroduced(String introduced) {
+		this.introduced = introduced;
+	}
+
+	public void setDiscontinued(String discontinued) {
+		this.discontinued = discontinued;
+	}
+
+	public void setCompany_id(Long company_id) {
+		this.company_id = company_id;
+	}
+	
+	@Override
+	public String toString() {
+		return "name : "+name+
+				" - introduced : "+introduced+
+				" - discontinued : "+discontinued+
+				" company id : "+company_id;
+	}
+	
+	//Builder
+	public static class Builder {
+		private String name = "";
+		private String introduced = "";
+		private String discontinued = "";
+		private Long company_id;
+		
+		public Builder(String name) {
+			this.name = name;
+		}
+		
+		public Builder setName(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder setIntroduced(String introduced) {
+			this.introduced = introduced;
+			return this;
+		}
+
+		public Builder setDiscontinued(String discontinued) {
+			this.discontinued = discontinued;
+			return this;
+		}
+
+		public Builder setCompany_id(Long company_id) {
+			this.company_id = company_id;
+			return this;
+		}
+		
+		public Computer build() {
+			return new Computer(this);
+		}
+	}
+
 }

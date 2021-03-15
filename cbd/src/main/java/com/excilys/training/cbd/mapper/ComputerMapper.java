@@ -14,17 +14,15 @@ public class ComputerMapper {
 				Long id = result.getLong("id");
 				String name = result.getString("name");
 				System.out.println("name : "+name);
-				java.sql.Date introduced = null;
-				java.sql.Date discontinued = null;
-				if(result.getString("introduced") != null) {
-					 introduced = result.getDate("introduced");
-				}
-				if(result.getString("discontinued") != null) {
-					discontinued = result.getDate("discontinued");
-				}
+				String introduced = result.getString("introduced");
+				String discontinued = result.getString("discontinued");
 				Long company_id = result.getLong("company_id");
 				
-				Computer computer = new Computer( name, introduced, discontinued, company_id);
+				Computer computer = new Computer.Builder(name)
+						.setIntroduced(introduced)
+						.setDiscontinued(discontinued)
+						.setCompany_id(company_id)
+						.build();
 				return Optional.of(computer);
 			}
 		} catch (SQLException e) {
@@ -32,4 +30,6 @@ public class ComputerMapper {
 		}
 		return Optional.empty();
 	}
+	
+	
 }
