@@ -1,10 +1,13 @@
 package com.excilys.training.cbd.service;
 
+import java.sql.ResultSet;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.persistence.ComputerDAO;
+import com.excilys.training.cbd.mapper.*;
 
 public class ServiceComputer {
 	
@@ -18,8 +21,9 @@ public class ServiceComputer {
 		computerDao.getOneComputer(idSearched);
 	}
 	
-	public static Computer getOneComputer(String nameSearched){
-		return computerDao.getOneComputer(nameSearched);
+	public static Optional<Computer> getOneComputer(String nameSearched){
+		ResultSet result = computerDao.getOneComputer(nameSearched).orElse(null);
+		return ComputerMapper.resultToComputer(result);
 	}
 	
 	public static void setNewComputer(Computer newComputer) {
