@@ -11,14 +11,14 @@ import com.excilys.training.cbd.mapper.ComputerMapper;
 import com.excilys.training.cbd.model.Computer;
 
 public class ComputerDAO {
-	private static DAOFactory daoFactory;
+	private static ConnectionManager connectionManager;
 
 	public ComputerDAO() {
-		ComputerDAO.daoFactory = DAOFactory.getInstance();
+		ComputerDAO.connectionManager = ConnectionManager.getInstance();
 	}
 
 	public void getAllComputers() throws DAOException{
-		try(Connection connexion = daoFactory.getConnection();
+		try(Connection connexion = connectionManager.getConnection();
 				Statement statement = connexion.createStatement();
 				) {
 			ResultSet resultat = statement.executeQuery( "SELECT * FROM computer;" );
@@ -34,7 +34,7 @@ public class ComputerDAO {
 	}
 
 	public Optional<ResultSet> getOneComputer(Long id) {
-		try(Connection connexion = daoFactory.getConnection();
+		try(Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "SELECT * FROM computer WHERE id = ? ;" );
 				) {
 			Long searchID = id;
@@ -47,7 +47,7 @@ public class ComputerDAO {
 	}
 
 	public Optional<ResultSet> getOneComputer(String nameSearched)  throws SQLException {
-		try(	Connection connexion = daoFactory.getConnection();
+		try(	Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "SELECT * FROM computer WHERE name = ? ;" );
 				) {
 			preStatement.setString( 1, nameSearched);
@@ -55,14 +55,12 @@ public class ComputerDAO {
 			return Optional.of(resultat);
 		}catch ( SQLException e ) {
 			throw  e ;
-			//System.out.println("Erreur " + e.getMessage());
 		}
-		//return Optional.empty();
 	}
 	
 	public void setNewComputer(Computer newComputer) {
 		int resultat = 0;
-		try (Connection connexion = daoFactory.getConnection();
+		try (Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "INSERT INTO computer "
 						+ "(name, introduced, discontinued, company_id) "
 						+ "VALUES(?, ?, ?, ?);" );
@@ -83,7 +81,7 @@ public class ComputerDAO {
 	}
 	
 	public void deleteComputer(Long id) {
-		try (Connection connexion = daoFactory.getConnection();
+		try (Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "DELETE FROM computer WHERE id = ? ");) {
 			
 			preStatement.setLong( 1, id);
@@ -100,7 +98,7 @@ public class ComputerDAO {
 	}
 	
 	public void deleteComputer(String name) {
-		try (Connection connexion = daoFactory.getConnection();
+		try (Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( 
 						"DELETE FROM computer WHERE name = ? ");) {
 			preStatement.setString( 1, name);
@@ -117,7 +115,7 @@ public class ComputerDAO {
 	
 	public void updateComputer(String oldName, Computer oldComputer, String newName, String introduced, String discontinued, Long companyID) {
 		int resultat = 0;
-		try (Connection connexion = daoFactory.getConnection();
+		try (Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "UPDATE computer SET "
 						+ "name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE name = ? ;" );
 				) {

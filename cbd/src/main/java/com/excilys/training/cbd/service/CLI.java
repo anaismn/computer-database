@@ -1,5 +1,6 @@
 package com.excilys.training.cbd.service;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,14 +9,16 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.Scanner;
 
+import com.excilys.training.cbd.model.Company;
 import com.excilys.training.cbd.model.Computer;
+import com.excilys.training.cbd.persistence.DAOException;
 
 public class CLI {
 
 	static Scanner sc;
 	static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) throws ParseException, SQLException {
 		sc = new Scanner(System.in); 
 		Boolean run = true;
 		int action;
@@ -39,7 +42,7 @@ public class CLI {
 		System.out.println("0 - To exit \n");
 	}
 
-	public static void choisirAction(int action) throws ParseException {
+	public static void choisirAction(int action) throws ParseException, SQLException {
 		switch(action) {
 		case 0:
 			System.out.println("See you again");
@@ -47,7 +50,8 @@ public class CLI {
 			break;
 		case 1:
 			System.out.println("List of All the companies");
-			ServiceCompany.getAllCompanies();
+			ArrayList<Company> companies = ServiceCompany.getAllCompanies();
+			companies.forEach((company) -> System.out.println(company)) ;
 			break;
 		case 2:
 			System.out.println("List of All the computers");
@@ -86,7 +90,7 @@ public class CLI {
 		}
 	}
 
-	private static void setNewComputerInfo() throws ParseException {
+	private static void setNewComputerInfo() throws ParseException, SQLException {
 		System.out.print("Name of the computer ? ");
 		String name = sc.nextLine();
 		System.out.println("name : "+name);

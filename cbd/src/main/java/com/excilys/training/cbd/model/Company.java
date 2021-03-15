@@ -18,6 +18,11 @@ public class Company {
 		return id;
 	}
 	
+	@Override
+	public String toString() {
+		return id+" - "+name;
+	}
+	
 	//Builder
 	public static class Builder {
 		private String name;

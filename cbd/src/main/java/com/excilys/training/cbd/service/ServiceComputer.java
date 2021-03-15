@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.persistence.ComputerDAO;
-import com.excilys.training.cbd.mapper.*;
+import com.excilys.training.cbd.mapper.ComputerMapper;
 
 public class ServiceComputer {
 	
