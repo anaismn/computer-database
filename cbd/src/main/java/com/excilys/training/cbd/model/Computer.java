@@ -65,11 +65,6 @@ public class Computer {
 		public Builder(String name) {
 			this.name = name;
 		}
-		
-		public Builder setName(String name) {
-			this.name = name;
-			return this;
-		}
 
 		public Builder setIntroduced(String introduced) {
 			this.introduced = introduced;

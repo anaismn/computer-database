@@ -5,8 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 
 import com.excilys.training.cbd.model.Company;
+import com.excilys.training.cbd.model.Computer;
 
 public class CompanyDAO {
 	private static DAOFactory daoFactory;
@@ -45,11 +47,14 @@ public class CompanyDAO {
 			while ( resultat.next() ) {
 				Long id = resultat.getLong("id");
 				String name = resultat.getString("name");
-				company = new Company(id, name);
+				 company = new Company.Builder(name)
+						.setID(id)
+						.build();
 			}
 		} catch ( SQLException e ) {
 			throw new DAOException( e );
 		}	
 		return company;
+//		return Optional.empty();
 	}
 }
