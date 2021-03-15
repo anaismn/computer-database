@@ -32,29 +32,15 @@ public class CompanyDAO {
 		}	
 	}
 
-	public Company getOneCompany(String nameSearched) throws DAOException{
-		Company company = null;
+	public Optional<ResultSet> getOneCompany(String nameSearched) throws DAOException{
 		try (Connection connexion = daoFactory.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "SELECT * FROM company WHERE name = ? ;" );
 				){
-
 			preStatement.setString( 1, nameSearched);
-
 			ResultSet resultat = preStatement.executeQuery();
-
-			/* Récupération des données du résultat de la requête de lecture */
-			System.out.println( "id  - name" );
-			while ( resultat.next() ) {
-				Long id = resultat.getLong("id");
-				String name = resultat.getString("name");
-				 company = new Company.Builder(name)
-						.setID(id)
-						.build();
-			}
+			return Optional.of(resultat);
 		} catch ( SQLException e ) {
 			throw new DAOException( e );
-		}	
-		return company;
-//		return Optional.empty();
+		}
 	}
 }

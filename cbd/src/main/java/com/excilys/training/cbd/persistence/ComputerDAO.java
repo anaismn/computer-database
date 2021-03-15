@@ -46,7 +46,7 @@ public class ComputerDAO {
 		}
 	}
 
-	public Optional<ResultSet> getOneComputer(String nameSearched) {
+	public Optional<ResultSet> getOneComputer(String nameSearched)  throws SQLException {
 		try(	Connection connexion = daoFactory.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "SELECT * FROM computer WHERE name = ? ;" );
 				) {
@@ -54,9 +54,10 @@ public class ComputerDAO {
 			ResultSet resultat = preStatement.executeQuery();
 			return Optional.of(resultat);
 		}catch ( SQLException e ) {
-			System.out.println("Erreur " + e.getMessage());
+			throw  e ;
+			//System.out.println("Erreur " + e.getMessage());
 		}
-		return Optional.empty();
+		//return Optional.empty();
 	}
 	
 	public void setNewComputer(Computer newComputer) {

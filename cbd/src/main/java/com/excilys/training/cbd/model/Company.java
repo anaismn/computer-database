@@ -19,7 +19,7 @@ public class Company {
 	}
 	
 	//Builder
-	public class Builder {
+	public static class Builder {
 		private String name;
 		private Long id = null;
 		
