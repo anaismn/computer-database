@@ -1,28 +1,36 @@
 package com.excilys.training.cbd.model;
 
+import java.time.LocalDate;
+
 public class Computer {
 
+	private Long id;
 	private String name = "";
-	private String introduced = "";
-	private String discontinued = "";
+	private LocalDate introduced = null;
+	private LocalDate discontinued = null;
 	private Long company_id;
 	
 	private Computer(Builder builder) {
+		this.id = builder.id;
 		this.name = builder.name;
 		this.introduced = builder.introduced;
 		this.discontinued = builder.discontinued;
 		this.company_id = builder.company_id;
 	}
 	
+	public Long getID() {
+		return id;
+	}
+	
 	public String getName() {
 		return name;
 	}
 	
-	public String getIntroduced() {
+	public LocalDate getIntroduced() {
 		return introduced;
 	}
 	
-	public String getDiscontinued() {
+	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
 	
@@ -35,11 +43,11 @@ public class Computer {
 		this.name = name;
 	}
 
-	public void setIntroduced(String introduced) {
+	public void setIntroduced(LocalDate introduced) {
 		this.introduced = introduced;
 	}
 
-	public void setDiscontinued(String discontinued) {
+	public void setDiscontinued(LocalDate discontinued) {
 		this.discontinued = discontinued;
 	}
 
@@ -57,21 +65,27 @@ public class Computer {
 	
 	//Builder
 	public static class Builder {
+		private Long id;
 		private String name = "";
-		private String introduced = "";
-		private String discontinued = "";
+		private LocalDate introduced = null;
+		private LocalDate discontinued = null;
 		private Long company_id;
 		
 		public Builder(String name) {
 			this.name = name;
 		}
+		
+		public Builder setID(Long id) {
+			this.id = id;
+			return this;
+		}
 
-		public Builder setIntroduced(String introduced) {
+		public Builder setIntroduced(LocalDate introduced) {
 			this.introduced = introduced;
 			return this;
 		}
 
-		public Builder setDiscontinued(String discontinued) {
+		public Builder setDiscontinued(LocalDate discontinued) {
 			this.discontinued = discontinued;
 			return this;
 		}

@@ -5,10 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Optional;
-
-import com.excilys.training.cbd.mapper.CompanyMapper;
+import java.util.TreeMap;
 
 public class CompanyDAO {
 	private static ConnectionManager connectionManager;
@@ -17,17 +14,17 @@ public class CompanyDAO {
 		CompanyDAO.connectionManager = ConnectionManager.getInstance();
 	}
 
-	public HashMap<String, Long> getAllCompanies() throws SQLException{
+	public TreeMap<Long, String> getAllCompanies() throws SQLException{
 		try (Connection connexion = connectionManager.getConnection();
 				Statement statement = connexion.createStatement();)
 		{
-			HashMap<String, Long> companies = new HashMap<String, Long>() ;
+			TreeMap<Long, String> companies = new TreeMap<Long, String>() ;
 			ResultSet resultat = statement.executeQuery( "SELECT * FROM company;" );
 			
 			while ( resultat.next() ) {
 				Long id = resultat.getLong("id");
 				String name = resultat.getString("name");
-				companies.put(name, id);
+				companies.put(id, name);
 			}
 			
 			return companies;
@@ -36,18 +33,18 @@ public class CompanyDAO {
 		}	
 	}
 
-	public HashMap<String, Long> getOneCompany(String nameSearched) throws SQLException{
+	public TreeMap<Long, String> getOneCompany(String nameSearched) throws SQLException{
 		try (Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "SELECT * FROM company WHERE name = ? ;" );
 				){
 			preStatement.setString( 1, nameSearched);
 			ResultSet resultat = preStatement.executeQuery();
-			HashMap<String, Long> companies = new HashMap<String, Long>() ;;
+			TreeMap<Long, String> companies = new TreeMap<Long, String>() ;
 			
 			while ( resultat.next() ) {
 				Long id = resultat.getLong("id");
 				String name = resultat.getString("name");
-				companies.put(name, id);
+				companies.put(id, name);
 			}
 			
 			return companies;

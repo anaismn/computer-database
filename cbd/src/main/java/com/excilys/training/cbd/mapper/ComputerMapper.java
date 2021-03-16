@@ -1,35 +1,54 @@
 package com.excilys.training.cbd.mapper;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.excilys.training.cbd.model.Computer;
 
 public class ComputerMapper {
 	
-	public static Optional<Computer> resultToComputer(ResultSet result) {
-		try {
-			while ( result.next() ) {
-				Long id = result.getLong("id");
-				String name = result.getString("name");
-				System.out.println("name : "+name);
-				String introduced = result.getString("introduced");
-				String discontinued = result.getString("discontinued");
-				Long company_id = result.getLong("company_id");
-				
-				Computer computer = new Computer.Builder(name)
-						.setIntroduced(introduced)
-						.setDiscontinued(discontinued)
-						.setCompany_id(company_id)
-						.build();
-				return Optional.of(computer);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+	static DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	
+	public static Computer resultToComputer(List<Object> list) {
+		Computer computer;
+		Long id = (Long) list.get(0);
+		String name = (String) list.get(1);
+		if(list.size()>2) {
+			LocalDate introduced = (LocalDate) list.get(2);
+			LocalDate discontinued = (LocalDate) list.get(3);
+			Long company_id = (Long) list.get(4);
+			computer = new Computer.Builder(name)
+					.setID(id)
+					.setIntroduced(introduced)
+					.setDiscontinued(discontinued)
+					.setCompany_id(company_id)
+					.build();
+		}else {
+			computer = new Computer.Builder(name)
+					.setID(id)
+					.build();
 		}
-		return Optional.empty();
+		
+		
+		return computer;
 	}
 	
+	public static ArrayList<Object> computerToResult(Computer computer) {
+		ArrayList<Object> informations = new ArrayList<Object>();
+		informations.add(computer.getID());
+		informations.add(computer.getName());
+		informations.add(Date.valueOf(computer.getIntroduced()));
+		informations.add(Date.valueOf(computer.getDiscontinued()));
+		informations.add(computer.getCompanyID());
+		return informations;
+	}
 	
 }

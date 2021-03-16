@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
@@ -55,12 +56,14 @@ public class CLI {
 			break;
 		case 2:
 			System.out.println("List of All the computers");
-			ServiceComputer.getAllComputers();
+			ArrayList<Computer> computers = ServiceComputer.getAllComputers();
+			computers.forEach((computer) -> System.out.println( " - id : "+ computer.getID() + " Name : "+computer.getName())) ;
 			break;
 		case 3:
 			System.out.println("Give the name of the computer, you're searching for");
 			String nameSearched = sc.nextLine() ;
-			System.out.println(ServiceComputer.getOneComputer(nameSearched));
+			Computer computer = ServiceComputer.getOneComputer(nameSearched);
+			System.out.println(computer) ;
 			break;
 		case 4:
 			System.out.println("Add a new computer to the database");
@@ -86,7 +89,7 @@ public class CLI {
 
 			break;
 		default :
-			System.out.println("Saturday");  
+			System.out.println("Vueillez choisir parmi ce qui est proposé");  
 		}
 	}
 
@@ -96,9 +99,9 @@ public class CLI {
 		System.out.println("name : "+name);
 
 		System.out.print("Date of its introduction ? ");
-		String introduced = checkDate();
+		LocalDate introduced = checkDate();
 		System.out.print("Date when it discontinued? ");
-		String discontinued = checkDate();
+		LocalDate discontinued = checkDate();
 
 		//	    System.out.print("What is its company ID ? ");
 		//	    Long companyID = Long.parseLong(sc.nextLine()) ;
@@ -116,62 +119,63 @@ public class CLI {
 		ServiceComputer.setNewComputer(computer);
 	}
 
-	private static String checkDate() {
+	private static LocalDate checkDate() {
 		while(true) {
 			System.out.println(" ( Please enter a date with this format yyyy-MM-dd )");
 			String date = sc.nextLine();
 			if(!"".equals(date)) {
 				dateFormat.setLenient(false);
-				try
-				{
-					 dateFormat.parse(date);
-					 return date;
-				}
-				/* Date format is invalid */
-				catch (ParseException e)
-				{
-					System.out.println(date+" is Invalid Date format");
-				}
+				return LocalDate.parse(date);
+			}
+		}
+	}
+	
+	private static LocalDate checkDate(LocalDate oldDate) {
+		while(true) {
+			System.out.println(" ( Please enter a date with this format yyyy-MM-dd )");
+			String date = sc.nextLine();
+			if(!"".equals(date)) {
+				dateFormat.setLenient(false);
+				return LocalDate.parse(date);
+			}else {
+				return oldDate;
 			}
 		}
 	}
 
-	private static void modifications(String oldName) {
-		System.out.println("1 - the name");
-		System.out.println("2 - the date of introduction");
-		System.out.println("3 - the date of discontinuation)");
-		System.out.println("4 - the company it's from");
+	private static void modifications(String oldName) throws SQLException {
+		System.out.println("if you doesn't want to change an information");
 
-		System.out.println("Example : if you want to change the name and the company it's from \n "+
-				"you will tape 14");
-
-		Optional<Computer> oldComputer = ServiceComputer.getOneComputer(oldName);
+		Computer oldComputer = ServiceComputer.getOneComputer(oldName);
 
 		String newName = oldName;
-		String introduced = "";
-		String discontinued = "";
-		Long companyID = null;
-
-		String modificationsChoice = sc.nextLine();
-		if (modificationsChoice.contains("1")) {
-			System.out.println("What is the new name of "+oldName+" ? ");
-			newName = sc.nextLine();
+		LocalDate introduced = oldComputer.getIntroduced();
+		LocalDate discontinued = oldComputer.getDiscontinued();
+		Long companyID = oldComputer.getCompanyID();
+		
+		System.out.println("What is the new name of "+oldName+" ? ");
+		String modif = sc.nextLine();
+		if(!"".equals(modif)) {
+			newName = modif;
 		}
-		if (modificationsChoice.contains("2")) {
-			System.out.print("Date of its introduction ? ");
-			introduced = dateFormat.format(checkDate());
-		}
-		if (modificationsChoice.contains("3")) {
-			System.out.print("Date when it was discontinued? ");
-			discontinued = dateFormat.format(checkDate());
-		}
-		if (modificationsChoice.contains("4")) {
-			System.out.println("What is the name of its company ? ");
-			String companyName = sc.nextLine();
-			companyID = ServiceCompany.getOneCompany(companyName).getID();
+		System.out.println("Date of its introduction ? ");
+		introduced = checkDate(introduced);
+		System.out.print("Date when it was discontinued? ");
+		discontinued = checkDate(discontinued);
+		
+		System.out.println("What is the name of its company ? ");
+		modif = sc.nextLine();
+		if(!"".equals(modif)) {
+			companyID = ServiceCompany.getOneCompany(modif).getID();
 		}
 
-		ServiceComputer.updateComputer(oldName,  oldComputer, newName, introduced, discontinued, companyID);
+		Computer updatedComputer = new Computer.Builder(newName)
+				.setIntroduced(introduced)
+				.setDiscontinued(discontinued)
+				.setCompany_id(companyID)
+				.build();
+		
+		ServiceComputer.updateComputer(oldName,  updatedComputer);
 	}
 
 }

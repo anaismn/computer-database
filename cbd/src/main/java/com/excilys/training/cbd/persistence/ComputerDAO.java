@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.sql.Date;
 import java.util.Optional;
 
 import com.excilys.training.cbd.mapper.ComputerMapper;
@@ -17,58 +20,83 @@ public class ComputerDAO {
 		ComputerDAO.connectionManager = ConnectionManager.getInstance();
 	}
 
-	public void getAllComputers() throws DAOException{
+	public ArrayList<Object> getAllComputers() throws DAOException, SQLException{
 		try(Connection connexion = connectionManager.getConnection();
 				Statement statement = connexion.createStatement();
 				) {
+			ArrayList<Object> result = new ArrayList<>();
 			ResultSet resultat = statement.executeQuery( "SELECT * FROM computer;" );
-			System.out.println( "id  - name" );
 			while ( resultat.next() ) {
-				int id = resultat.getInt("id");
-				String name = resultat.getString("name");
-				System.out.println( id+" - "+name);
+				result.add(resultat.getLong("id"));
+				result.add(resultat.getString("name"));
 			}
+			return result;
 		} catch ( SQLException e ) {
-			System.out.println("Error while connecting! "+ e);
+			throw  e ;
 		}
 	}
 
-	public Optional<ResultSet> getOneComputer(Long id) {
+	public Computer getOneComputer(Long id) {
 		try(Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "SELECT * FROM computer WHERE id = ? ;" );
 				) {
 			Long searchID = id;
+			Computer computer = null;
 			preStatement.setLong( 1, searchID);
-			ResultSet resultat = preStatement.executeQuery();
-			return Optional.of(resultat);
+			ResultSet result = preStatement.executeQuery();
+			while ( result.next() ) {
+				String name = result.getString("name");
+				System.out.println("name : "+name);
+				String introduced = result.getString("introduced");
+				String discontinued = result.getString("discontinued");
+				Long company_id = result.getLong("company_id");
+				
+				computer = new Computer.Builder(name)
+						.setIntroduced(introduced)
+						.setDiscontinued(discontinued)
+						.setCompany_id(company_id)
+						.build();
+			}
+			return computer;
 		} catch ( SQLException e ) {
 			throw new DAOException( e );
 		}
 	}
 
-	public Optional<ResultSet> getOneComputer(String nameSearched)  throws SQLException {
+	public ArrayList<Object> getOneComputer(String nameSearched)  throws SQLException {
 		try(	Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "SELECT * FROM computer WHERE name = ? ;" );
 				) {
 			preStatement.setString( 1, nameSearched);
+			ArrayList<Object> result = new ArrayList<>();
 			ResultSet resultat = preStatement.executeQuery();
-			return Optional.of(resultat);
+			
+			while ( resultat.next() ) {
+				result.add(resultat.getLong("id"));
+				result.add(resultat.getString("name"));
+				LocalDate introduced = resultat.getDate("introduced").toLocalDate();
+				result.add(introduced);
+				LocalDate discontinued = resultat.getDate("discontinued").toLocalDate();
+				result.add(discontinued);
+				result.add(resultat.getLong("company_id"));
+			}
+			return result;
 		}catch ( SQLException e ) {
 			throw  e ;
 		}
 	}
 	
-	public void setNewComputer(Computer newComputer) {
+	public void setNewComputer(ArrayList<Object> informations) {
 		int resultat = 0;
 		try (Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "INSERT INTO computer "
 						+ "(name, introduced, discontinued, company_id) "
 						+ "VALUES(?, ?, ?, ?);" );
 				) {
-			preStatement.setString( 1, newComputer.getName());
-			preStatement.setString( 2, newComputer.getIntroduced());
-			preStatement.setString( 3, newComputer.getDiscontinued());
-			preStatement.setLong( 4, newComputer.getCompanyID());
+			preStatement.setString( 1, (String) informations.get(1));
+			preStatement.setDate( 2, (Date) informations.get(2));
+			preStatement.setDate( 3, (Date) informations.get(3));
+			preStatement.setLong( 4, (Long) informations.get(4));
 			resultat = preStatement.executeUpdate();
 			if(resultat == 1) {
 				System.out.println("Ajout réussie! ");
@@ -113,23 +141,18 @@ public class ComputerDAO {
 		}
 	}
 	
-	public void updateComputer(String oldName, Computer oldComputer, String newName, String introduced, String discontinued, Long companyID) {
+	public void updateComputer(String oldName, ArrayList<Object> updatedInfo) {
 		int resultat = 0;
 		try (Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "UPDATE computer SET "
 						+ "name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE name = ? ;" );
 				) {
-			String updatedName = newName==null ? oldComputer.getName() : newName;
-			String updatedIntroduced = introduced==null ? oldComputer.getIntroduced() : introduced;
-			String updatedDiscontinued = discontinued==null ? oldComputer.getDiscontinued() : discontinued;
-			Long updatedCompany = companyID==null ? oldComputer.getCompanyID() : companyID;
-		
-			preStatement.setString( 1, updatedName);
-			preStatement.setString( 2, updatedIntroduced);
-			preStatement.setString( 3, updatedDiscontinued);
-			preStatement.setLong( 4, updatedCompany);
-			preStatement.setString( 5, oldName);
-
+			preStatement.setString( 1, (String) updatedInfo.get(1));
+			preStatement.setDate( 2, (Date) updatedInfo.get(2));
+			preStatement.setDate( 3, (Date) updatedInfo.get(3));
+			preStatement.setLong( 4, (Long) updatedInfo.get(4));
+			preStatement.setString( 5, (String) oldName);
+			
 			resultat = preStatement.executeUpdate();
 			if(resultat == 1) {
 				System.out.println("Update réussie! ");
