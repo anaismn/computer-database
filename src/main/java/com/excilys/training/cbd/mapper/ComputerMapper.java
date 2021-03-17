@@ -36,8 +36,6 @@ public class ComputerMapper {
 					.setID(id)
 					.build();
 		}
-		
-		
 		return computer;
 	}
 	

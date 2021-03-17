@@ -10,17 +10,21 @@ import java.util.ArrayList;
 import java.sql.Date;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.training.cbd.mapper.ComputerMapper;
 import com.excilys.training.cbd.model.Computer;
 
 public class ComputerDAO {
 	private static ConnectionManager connectionManager;
+	private static final Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
 	public ComputerDAO() {
 		ComputerDAO.connectionManager = ConnectionManager.getInstance();
 	}
 
-	public ArrayList<Object> getAllComputers() throws DAOException, SQLException{
+	public ArrayList<Object> getAllComputers() throws DAOException {
 		try(Connection connexion = connectionManager.getConnection();
 				Statement statement = connexion.createStatement();
 				) {
@@ -32,7 +36,8 @@ public class ComputerDAO {
 			}
 			return result;
 		} catch ( SQLException e ) {
-			throw  e ;
+			throw new DAOException(e) ;
+			//logger.error(e.getMessage());
 		}
 	}
 
@@ -63,7 +68,7 @@ public class ComputerDAO {
 		}
 	}
 
-	public ArrayList<Object> getOneComputer(String nameSearched)  throws SQLException {
+	public ArrayList<Object> getOneComputer(String nameSearched) throws DAOException {
 		try(	Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "SELECT * FROM computer WHERE name = ? ;" );
 				) {
@@ -82,11 +87,11 @@ public class ComputerDAO {
 			}
 			return result;
 		}catch ( SQLException e ) {
-			throw  e ;
+			throw new DAOException( e );
 		}
 	}
 	
-	public void setNewComputer(ArrayList<Object> informations) {
+	public void setNewComputer(ArrayList<Object> informations) throws DAOException {
 		int resultat = 0;
 		try (Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "INSERT INTO computer "
@@ -108,7 +113,7 @@ public class ComputerDAO {
 		}
 	}
 	
-	public void deleteComputer(Long id) {
+	public void deleteComputer(Long id) throws DAOException {
 		try (Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "DELETE FROM computer WHERE id = ? ");) {
 			
@@ -125,7 +130,7 @@ public class ComputerDAO {
 		}
 	}
 	
-	public void deleteComputer(String name) {
+	public void deleteComputer(String name) throws DAOException {
 		try (Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( 
 						"DELETE FROM computer WHERE name = ? ");) {
@@ -141,7 +146,7 @@ public class ComputerDAO {
 		}
 	}
 	
-	public void updateComputer(String oldName, ArrayList<Object> updatedInfo) {
+	public void updateComputer(String oldName, ArrayList<Object> updatedInfo) throws DAOException {
 		int resultat = 0;
 		try (Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "UPDATE computer SET "
@@ -160,7 +165,7 @@ public class ComputerDAO {
 				System.out.println("Echec de l'update ");
 			}
 		}catch ( SQLException e ) {
-			System.out.println("Error while connecting! "+ e);
+			throw new DAOException( e );
 		}
 	}
 	

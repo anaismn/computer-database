@@ -22,15 +22,12 @@ public class CLI {
 	static Scanner sc;
 	static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	
-	private static final Logger logger = LoggerFactory.getLogger(CLI.class);
-
 	public static void main(String[] args) throws ParseException, SQLException {
 		sc = new Scanner(System.in); 
 		Boolean run = true;
 		int action;
 
 		while(run) {
-			logger.info("LOOOOOOOOG");
 			menu();
 			action = Integer.parseInt(sc.nextLine()) ; 
 			choisirAction(action);
@@ -63,7 +60,7 @@ public class CLI {
 		case 2:
 			System.out.println("List of All the computers");
 			ArrayList<Computer> computers = ServiceComputer.getAllComputers();
-			computers.forEach((computer) -> System.out.println( " - id : "+ computer.getID() + " Name : "+computer.getName())) ;
+			computers.forEach((computer) -> System.out.println( " - id : "+ computer.getID() + " = Name : "+computer.getName())) ;
 			break;
 		case 3:
 			System.out.println("Give the name of the computer, you're searching for");

@@ -1,18 +1,24 @@
 package com.excilys.training.cbd.persistence;
 
-public class DAOException extends RuntimeException {
-    /*
-     * Constructeurs
-     */
-    public DAOException( String message ) {
-        super( message );
+import java.sql.SQLException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class DAOException extends SQLException {
+	
+	private static final Logger logger = LoggerFactory.getLogger(DAOException.class);
+	
+	public DAOException( String message ) {
+        logger.info(message);
     }
 
     public DAOException( String message, Throwable cause ) {
-        super( message, cause );
+    	logger.info(message);
+    	logger.error( cause.toString() );
     }
 
     public DAOException( Throwable cause ) {
-        super( cause );
-    }
+    	logger.error( cause.toString() );
+    } 
 }

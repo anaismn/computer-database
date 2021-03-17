@@ -13,14 +13,14 @@ public class ServiceCompany {
 	
 	static CompanyDAO companyDao = new CompanyDAO();
 	
-	public static ArrayList<Company> getAllCompanies() throws SQLException {
+	public static ArrayList<Company> getAllCompanies() throws DAOException {
 		ArrayList<Company> companies = new ArrayList<Company>();
 		TreeMap<Long, String> result = companyDao.getAllCompanies();
 		result.forEach((id, name) -> companies.add(CompanyMapper.resultToCompany(name, id)));
 		return companies;
 	}
 
-	public static Company getOneCompany(String nameSearched) throws DAOException, SQLException{
+	public static Company getOneCompany(String nameSearched) throws DAOException {
 		ArrayList<Company> companies = new ArrayList<Company>();
 		TreeMap<Long, String> result= companyDao.getOneCompany(nameSearched) ;
 		result.forEach((id, name) -> companies.add(CompanyMapper.resultToCompany(name, id)));

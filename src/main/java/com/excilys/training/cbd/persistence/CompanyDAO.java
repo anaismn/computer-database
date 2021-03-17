@@ -14,7 +14,7 @@ public class CompanyDAO {
 		CompanyDAO.connectionManager = ConnectionManager.getInstance();
 	}
 
-	public TreeMap<Long, String> getAllCompanies() throws SQLException{
+	public TreeMap<Long, String> getAllCompanies() throws DAOException {
 		try (Connection connexion = connectionManager.getConnection();
 				Statement statement = connexion.createStatement();)
 		{
@@ -29,11 +29,11 @@ public class CompanyDAO {
 			
 			return companies;
 		} catch ( SQLException e ) {
-			throw e;
+			throw new DAOException(e) ;
 		}	
 	}
 
-	public TreeMap<Long, String> getOneCompany(String nameSearched) throws SQLException{
+	public TreeMap<Long, String> getOneCompany(String nameSearched) throws DAOException {
 		try (Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "SELECT * FROM company WHERE name = ? ;" );
 				){
@@ -49,7 +49,7 @@ public class CompanyDAO {
 			
 			return companies;
 		} catch ( SQLException e ) {
-			throw e;
+			throw new DAOException(e) ;
 		}
 	}
 }

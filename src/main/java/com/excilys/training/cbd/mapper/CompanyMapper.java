@@ -9,7 +9,7 @@ import com.excilys.training.cbd.persistence.DAOException;
 
 	public class CompanyMapper {
 
-		public static Company resultToCompany(String name, Long id) throws DAOException {
+		public static Company resultToCompany(String name, Long id) {
 			return new Company.Builder(name)
 							.setID(id)
 							.build();
