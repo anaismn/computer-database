@@ -18,7 +18,7 @@ import com.excilys.training.cbd.model.Computer;
 
 public class ComputerDAO {
 	private static ConnectionManager connectionManager;
-	private static final Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+	//private static final Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
 	public ComputerDAO() {
 		ComputerDAO.connectionManager = ConnectionManager.getInstance();
@@ -41,28 +41,25 @@ public class ComputerDAO {
 		}
 	}
 
-	public Computer getOneComputer(Long id) {
+	public ArrayList<Object> getOneComputer(Long id) throws DAOException {
 		try(Connection connexion = connectionManager.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement( "SELECT * FROM computer WHERE id = ? ;" );
 				) {
 			Long searchID = id;
-			Computer computer = null;
+			ArrayList<Object> result = new ArrayList<>();
 			preStatement.setLong( 1, searchID);
-			ResultSet result = preStatement.executeQuery();
-			while ( result.next() ) {
-				String name = result.getString("name");
-				System.out.println("name : "+name);
-				String introduced = result.getString("introduced");
-				String discontinued = result.getString("discontinued");
-				Long company_id = result.getLong("company_id");
-				
-				computer = new Computer.Builder(name)
-						.setIntroduced(introduced)
-						.setDiscontinued(discontinued)
-						.setCompany_id(company_id)
-						.build();
+			ResultSet resultat = preStatement.executeQuery();
+			
+			while ( resultat.next() ) {
+				result.add(resultat.getLong("id"));
+				result.add(resultat.getString("name"));
+				LocalDate introduced = resultat.getDate("introduced").toLocalDate();
+				result.add(introduced);
+				LocalDate discontinued = resultat.getDate("discontinued").toLocalDate();
+				result.add(discontinued);
+				result.add(resultat.getLong("company_id"));
 			}
-			return computer;
+			return result;
 		} catch ( SQLException e ) {
 			throw new DAOException( e );
 		}

@@ -3,7 +3,7 @@ package com.excilys.training.cbd.persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.training.cbd.service.CLI;
+import com.excilys.training.cbd.view.CLI;
 
 public class DAOConfigurationException extends RuntimeException {
 

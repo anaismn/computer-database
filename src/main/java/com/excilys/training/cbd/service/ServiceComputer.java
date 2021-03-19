@@ -1,13 +1,7 @@
 package com.excilys.training.cbd.service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Optional;
-import java.util.TreeMap;
 
-import com.excilys.training.cbd.model.Company;
 import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.persistence.ComputerDAO;
 import com.excilys.training.cbd.persistence.DAOException;
@@ -26,7 +20,7 @@ public class ServiceComputer {
 		return computers;
 	}
 	
-	public static void getOneComputer(Long idSearched) {
+	public static void getOneComputer(Long idSearched) throws DAOException {
 		computerDao.getOneComputer(idSearched);
 	}
 	

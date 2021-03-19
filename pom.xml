@@ -5,13 +5,15 @@
   <groupId>com.excilys.training.cbd</groupId>
   <artifactId>cbd-maven</artifactId>
   <version>version-1</version>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
   <name>cbd-maven</name>
   <url>http://maven.apache.org</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
   <dependencies>
@@ -43,10 +45,26 @@
 	    <version>1.7.30</version>
 	</dependency>
 	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-log4j12</artifactId>
+	    <version>1.7.30</version>
+	</dependency>
+	<dependency>
 	    <groupId>ch.qos.logback</groupId>
 	    <artifactId>logback-classic</artifactId>
 	    <version>1.2.3</version>
 	    <scope>test</scope>
+	</dependency>
+	<dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>javax.servlet-api</artifactId>
+	    <version>4.0.1</version>
+	    <scope>provided</scope>
+	</dependency>
+	<dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>jstl</artifactId>
+	    <version>1.2</version>
 	</dependency>
   </dependencies>
 </project>
