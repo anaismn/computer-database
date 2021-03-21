@@ -10,15 +10,8 @@ import java.util.ArrayList;
 import java.sql.Date;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.excilys.training.cbd.mapper.ComputerMapper;
-import com.excilys.training.cbd.model.Computer;
-
 public class ComputerDAO {
 	private static ConnectionManager connectionManager;
-	//private static final Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
 	public ComputerDAO() {
 		ComputerDAO.connectionManager = ConnectionManager.getInstance();
@@ -33,6 +26,11 @@ public class ComputerDAO {
 			while ( resultat.next() ) {
 				result.add(resultat.getLong("id"));
 				result.add(resultat.getString("name"));
+				LocalDate introduced = null != resultat.getDate("introduced") ? resultat.getDate("introduced").toLocalDate() : null;
+				result.add(introduced);
+				LocalDate discontinued = null!= resultat.getDate("discontinued")? resultat.getDate("discontinued").toLocalDate() : null;
+				result.add(discontinued);
+				result.add(resultat.getLong("company_id"));
 			}
 			return result;
 		} catch ( SQLException e ) {

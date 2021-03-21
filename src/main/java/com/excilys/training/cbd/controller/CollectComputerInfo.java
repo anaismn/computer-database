@@ -9,7 +9,7 @@ import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.service.ServiceCompany;
 import com.excilys.training.cbd.service.ServiceComputer;
 
-public class collectComputerInfo {
+public class CollectComputerInfo {
 
 	static Scanner sc = new Scanner(System.in); 
 	

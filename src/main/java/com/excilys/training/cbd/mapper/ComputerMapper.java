@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.excilys.training.cbd.model.Computer;
+import com.excilys.training.cbd.model.ComputerDTO;
 
 public class ComputerMapper {
 	
@@ -48,5 +49,11 @@ public class ComputerMapper {
 		informations.add(computer.getCompanyID());
 		return informations;
 	}
+	
+//	public static ComputerDTO computerToDTO(Computer computer) {
+//		company = 
+//		ComputerDTO computerDTO = new ComputerDTO(computer.getID(), computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), String company)
+//		return computerDTO;
+//	}	
 	
 }

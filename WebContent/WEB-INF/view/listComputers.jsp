@@ -5,21 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="../css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="../css/main.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <a class="navbar-brand" href="listComputers.jsp"> Application - Computer Database </a>
         </div>
     </header>
 
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-            ${test}
+         <%--   ${test} --%>
                 121 Computers found
             </h1>
             <div id="actions" class="form-horizontal">
@@ -76,7 +76,7 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                <c:forEach items="${ listComputers }" var="computer" varStatus="status">
+                 <c:forEach items="${ listComputers }" var="computer" varStatus="status">
 				    
 				      <tr>
                         <td class="editMode">
@@ -86,13 +86,13 @@
                             <a href="editComputer.html" onclick=""><c:out value="${ computer.name }" /></a>
                         </td>
                          <td><c:out value="${ computer.introduced }" /></td>
-                        <td></td>
+                        <td> <c:out value="${ computer.discontinued }" /> </td>
                         <td> <c:out value="${ computer.getCompanyID() }" /> </td> 
 
                     </tr>
 				    
 				    
-				</c:forEach>
+				</c:forEach> 
                 
                 
                   

@@ -14,8 +14,8 @@ public class ServiceComputer {
 	public static ArrayList<Computer> getAllComputers() throws DAOException {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		ArrayList<Object> result = computerDao.getAllComputers();
-		for(int i=0; i<result.size(); i=i+2) {
-			computers.add( ComputerMapper.resultToComputer(result.subList(i, i+2)) );
+		for(int i=0; i<result.size(); i=i+5) {
+			computers.add( ComputerMapper.resultToComputer(result.subList(i, i+5)) );
 		}
 		return computers;
 	}

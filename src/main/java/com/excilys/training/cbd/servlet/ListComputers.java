@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.persistence.DAOException;
+import com.excilys.training.cbd.service.ServiceCompany;
 import com.excilys.training.cbd.service.ServiceComputer;
 
 public class ListComputers extends HttpServlet  {
@@ -28,13 +29,15 @@ public class ListComputers extends HttpServlet  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+//		ServiceCompany.getOneCompany(modif);
+		
 
 //		computers.forEach((computer) -> System.out.println( " - id : "+ computer.getID() + " = Name : "+computer.getName())) ;
 		request.setAttribute( NBR_COMPUTER, "grogro" );
 		request.setAttribute( LIST_COMPUTERS, computers );
 //		request.setAttribute(, response);
 		
-		this.getServletContext().getRequestDispatcher( "/WEB-INF/listComputers.jsp" ).forward( request, response );
+		this.getServletContext().getRequestDispatcher( "/WEB-INF/view/listComputers.jsp" ).forward( request, response );
 	}
 
 }

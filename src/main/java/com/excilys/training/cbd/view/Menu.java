@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.excilys.training.cbd.controller.collectComputerInfo;
+import com.excilys.training.cbd.controller.CollectComputerInfo;
 import com.excilys.training.cbd.model.Company;
 import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.service.ServiceCompany;
@@ -47,13 +47,13 @@ public class Menu {
 			break;
 		case CREATE_COMPUTER:
 			System.out.println("Add a new computer to the database");
-			collectComputerInfo.setNewComputerInfo();
+			CollectComputerInfo.setNewComputerInfo();
 			break;
 		case UPDATE_COMPUTER:
 			System.out.println("Give the name of the computer, you'll update ");
 			String name = sc.nextLine() ;  
 			System.out.println("Tell me what you want modify. There is : ");
-			collectComputerInfo.modifications(name);
+			CollectComputerInfo.modifications(name);
 			break;
 		case DELETE_COMPUTER:
 			System.out.println("Give the name of the computer, you want to delete");
