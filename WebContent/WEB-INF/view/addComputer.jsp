@@ -11,7 +11,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <a class="navbar-brand" href="listComputers"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -24,20 +24,24 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" placeholder="Computer name">
+                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name">
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date">
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date">
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date">
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
-                                <select class="form-control" id="companyId" >
-                                    <option value="0">--</option>
+                                <label for="company">Company</label>
+                                 
+                                <select class="form-control" id="company" name="company">
+                                 	<option value=null > Aucune </option>
+                                     <c:forEach items="${ listCompanies }" var="company" varStatus="status">
+							            <option value= "${ company.id }" > ${ company.name} </option>
+						       		</c:forEach> 
                                 </select>
                             </div>                  
                         </fieldset>

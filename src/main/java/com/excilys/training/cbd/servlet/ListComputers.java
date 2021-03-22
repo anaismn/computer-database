@@ -16,7 +16,6 @@ import com.excilys.training.cbd.persistence.DAOException;
 import com.excilys.training.cbd.service.ServiceComputer;
 
 public class ListComputers extends HttpServlet  {
-	public static final String NBR_COMPUTER = "test";
 	public static final String LIST_COMPUTERS = "listComputers";
 	
 	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException{

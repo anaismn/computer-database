@@ -52,4 +52,24 @@ public class CompanyDAO {
 			throw new DAOException(e) ;
 		}
 	}
+	
+	public TreeMap<Long, String> getOneCompany(Long idSearched) throws DAOException {
+		try (Connection connexion = connectionManager.getConnection();
+				PreparedStatement preStatement = connexion.prepareStatement( "SELECT * FROM company WHERE id = ? ;" );
+				){
+			preStatement.setLong( 1, idSearched);
+			ResultSet resultat = preStatement.executeQuery();
+			TreeMap<Long, String> companies = new TreeMap<Long, String>() ;
+			
+			while ( resultat.next() ) {
+				Long id = resultat.getLong("id");
+				String name = resultat.getString("name");
+				companies.put(id, name);
+			}
+			
+			return companies;
+		} catch ( SQLException e ) {
+			throw new DAOException(e) ;
+		}
+	}
 }

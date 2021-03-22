@@ -25,4 +25,12 @@ public class ServiceCompany {
 		result.forEach((id, name) -> companies.add(CompanyMapper.resultToCompany(name, id)));
 		return companies.get(0);
 	}
+	
+	public static Company getOneCompany(Long idSearched) throws DAOException {
+		ArrayList<Company> companies = new ArrayList<Company>();
+		TreeMap<Long, String> result= companyDao.getOneCompany(idSearched) ;
+		result.forEach((id, name) -> companies.add(CompanyMapper.resultToCompany(name, id)));
+		return companies.get(0);
+	}
+	
 }

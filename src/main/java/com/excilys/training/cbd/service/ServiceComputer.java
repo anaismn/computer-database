@@ -21,7 +21,7 @@ public class ServiceComputer {
 		for(int i=0; i<result.size(); i=i+5) {
 			if(NO_COMPANY != result.get(i+4)) {
 				for(Company company : companies) {
-					if (company.getID() == result.get(i+4) ) {
+					if (company.getId() == result.get(i+4) ) {
 						result.set(i+4, company); 
 						break;
 					}

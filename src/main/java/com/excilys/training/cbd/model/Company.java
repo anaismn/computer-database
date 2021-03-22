@@ -14,8 +14,16 @@ public class Company {
 		return name;
 	}
 	
-	public Long getID() {
+	public Long getId() {
 		return id;
+	}
+	
+	public void setName() {
+		this.name = name;
+	}
+	
+	public void setId() {
+		this.id = id;
 	}
 	
 	@Override
@@ -32,7 +40,7 @@ public class Company {
 			this.name = name;
 		}
 		
-		public Builder setID(Long id) {
+		public Builder setId(Long id) {
 			this.id = id;
 			return this;
 		}

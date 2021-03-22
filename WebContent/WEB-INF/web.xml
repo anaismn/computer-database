@@ -27,5 +27,15 @@
 		<servlet-name>ListComputers</servlet-name>
 		<url-pattern>/listComputers</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AddComputer</servlet-name>
+		<servlet-class>com.excilys.training.cbd.servlet.AddComputer</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AddComputer</servlet-name>
+		<url-pattern>/addComputer</url-pattern>
+	</servlet-mapping>
   
 </web-app>

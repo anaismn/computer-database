@@ -12,7 +12,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="listComputers.jsp"> Application - Computer Database </a>
+            <a class="navbar-brand" href="listComputers"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -31,7 +31,7 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer.html">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer"  href="addComputer">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>

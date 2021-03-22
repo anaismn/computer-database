@@ -37,7 +37,7 @@ public class Menu {
 		case LIST_COMPUTERS:
 			System.out.println("List of All the computers");
 			ArrayList<Computer> computers = ServiceComputer.getAllComputers();
-			computers.forEach((computer) -> System.out.println( " - id : "+ computer.getID() + " = Name : "+computer.getName())) ;
+			computers.forEach((computer) -> System.out.println( " - id : "+ computer.getId() + " = Name : "+computer.getName())) ;
 			break;
 		case ONE_COMPUTER:
 			System.out.println("Give the name of the computer, you're searching for");

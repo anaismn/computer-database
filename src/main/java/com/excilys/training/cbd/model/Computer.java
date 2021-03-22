@@ -18,7 +18,7 @@ public class Computer {
 		this.company = builder.company;
 	}
 	
-	public Long getID() {
+	public Long getId() {
 		return id;
 	}
 	
@@ -75,7 +75,7 @@ public class Computer {
 			this.name = name;
 		}
 		
-		public Builder setID(Long id) {
+		public Builder setId(Long id) {
 			this.id = id;
 			return this;
 		}

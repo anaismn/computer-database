@@ -24,7 +24,7 @@ public class ComputerMapper {
 		String name = (String) list.get(1);
 		
 		Computer.Builder builder = new Computer.Builder(name)
-				.setID(id);
+				.setId(id);
 		
 		if(list.size()>2) {
 			LocalDate introduced = (LocalDate) list.get(2);
@@ -32,7 +32,6 @@ public class ComputerMapper {
 			builder = builder.setIntroduced(introduced)
 					.setDiscontinued(discontinued);
 			if(list.get(4).getClass().getName().equals("com.excilys.training.cbd.model.Company")) {
-				System.out.println(list.get(4));
 				Company company = (Company) list.get(4);
 				builder = builder.setCompany(company);
 			}
@@ -42,23 +41,34 @@ public class ComputerMapper {
 	
 	public static ArrayList<Object> computerToResult(Computer computer) {
 		ArrayList<Object> informations = new ArrayList<Object>();
-		informations.add(computer.getID());
+		informations.add(computer.getId());
 		informations.add(computer.getName());
 		informations.add(Date.valueOf(computer.getIntroduced()));
 		informations.add(Date.valueOf(computer.getDiscontinued()));
-		informations.add(computer.getCompany().getID());
+		informations.add(computer.getCompany().getId());
 		return informations;
 	}
 	
 	public static ComputerDTO computerToDTO(Computer computer) {
-		Long idDTO = computer.getID();
 		String nameDTO = computer.getName();
 		String introducedDTO = null!= computer.getIntroduced() ? computer.getIntroduced().format(dateFormat): "";
 		String discontinuedDTO = null != computer.getDiscontinued() ? computer.getDiscontinued().format(dateFormat) : "" ; 
-		System.out.println(computer.getCompany());
 		String companyDTO = null != computer.getCompany() ? computer.getCompany().getName() : "" ; 
-		ComputerDTO computerDTO = new ComputerDTO( idDTO, nameDTO, introducedDTO , discontinuedDTO , companyDTO ) ;
+		ComputerDTO computerDTO = new ComputerDTO( nameDTO, introducedDTO , discontinuedDTO , companyDTO ) ;
 		return computerDTO;
 	}	
+	
+	public static Computer dtoToComputer(ComputerDTO computerDTO, Company company) {
+		String name = computerDTO.getName();
+		LocalDate introduced = LocalDate.parse(computerDTO.getIntroduced());
+		LocalDate discontinued = LocalDate.parse(computerDTO.getDiscontinued());
+		Computer computer = new Computer.Builder(name)
+				.setIntroduced(introduced)
+				.setDiscontinued(discontinued)
+				.setCompany(company)
+				.build() ;
+		return computer;
+	}
+	
 	
 }
