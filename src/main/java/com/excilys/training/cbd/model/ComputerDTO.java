@@ -6,7 +6,7 @@ public class ComputerDTO {
 	private String name;
 	private String introduced ;
 	private String discontinued ;
-	private String company;
+	private String company = "";
 
 	public ComputerDTO(Long id, String name, String introduced, String discontinued, String company) {
 		super();

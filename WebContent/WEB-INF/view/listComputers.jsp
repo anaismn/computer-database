@@ -86,7 +86,7 @@
                         </td>
                          <td><c:out value="${ computer.introduced }" /></td>
                         <td> <c:out value="${ computer.discontinued }" /> </td>
-                        <td> <c:out value="${ computer.company }" /> </td> 
+                        <td> <c:out value="${ computer.getCompany() }" /> </td> 
                     </tr>
 				    
 				</c:forEach> 

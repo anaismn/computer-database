@@ -31,8 +31,7 @@ public class ComputerMapper {
 			LocalDate discontinued = (LocalDate) list.get(3);
 			builder = builder.setIntroduced(introduced)
 					.setDiscontinued(discontinued);
-			
-			if(list.get(4).getClass().getName().equals("Company")) {
+			if(list.get(4).getClass().getName().equals("com.excilys.training.cbd.model.Company")) {
 				System.out.println(list.get(4));
 				Company company = (Company) list.get(4);
 				builder = builder.setCompany(company);
@@ -54,9 +53,10 @@ public class ComputerMapper {
 	public static ComputerDTO computerToDTO(Computer computer) {
 		Long idDTO = computer.getID();
 		String nameDTO = computer.getName();
-		String introducedDTO = computer.getIntroduced().format(dateFormat);
-		String discontinuedDTO = computer.getDiscontinued().format(dateFormat) ; 
-		String companyDTO = computer.getCompany().getName() ; 
+		String introducedDTO = null!= computer.getIntroduced() ? computer.getIntroduced().format(dateFormat): "";
+		String discontinuedDTO = null != computer.getDiscontinued() ? computer.getDiscontinued().format(dateFormat) : "" ; 
+		System.out.println(computer.getCompany());
+		String companyDTO = null != computer.getCompany() ? computer.getCompany().getName() : "" ; 
 		ComputerDTO computerDTO = new ComputerDTO( idDTO, nameDTO, introducedDTO , discontinuedDTO , companyDTO ) ;
 		return computerDTO;
 	}	
