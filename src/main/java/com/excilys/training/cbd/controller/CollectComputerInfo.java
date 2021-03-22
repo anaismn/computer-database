@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
+import com.excilys.training.cbd.model.Company;
 import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.service.ServiceCompany;
 import com.excilys.training.cbd.service.ServiceComputer;
@@ -25,16 +26,16 @@ public class CollectComputerInfo {
 		LocalDate discontinued = CheckDate.checkDateFormat();
 
 		//	    System.out.print("What is its company ID ? ");
-		//	    Long companyID = Long.parseLong(sc.nextLine()) ;
+		//	    Long company = Long.parseLong(sc.nextLine()) ;
 
 		System.out.print("What is its company name? ");
 		String companyName = sc.nextLine();
-		Long companyID = ServiceCompany.getOneCompany(companyName).getID();
+		Company company = ServiceCompany.getOneCompany(companyName);
 
 		Computer computer = new Computer.Builder(name)
 				.setIntroduced(introduced)
 				.setDiscontinued(discontinued)
-				.setCompany_id(companyID)
+				.setCompany(company)
 				.build();
 	        System.out.println(computer);
 		ServiceComputer.setNewComputer(computer);
@@ -48,7 +49,7 @@ public class CollectComputerInfo {
 		String newName = oldName;
 		LocalDate introduced = oldComputer.getIntroduced();
 		LocalDate discontinued = oldComputer.getDiscontinued();
-		Long companyID = oldComputer.getCompanyID();
+		Company company = oldComputer.getCompany();
 		
 		System.out.println("What is the new name of "+oldName+" ? ");
 		String modif = sc.nextLine();
@@ -63,13 +64,13 @@ public class CollectComputerInfo {
 		System.out.println("What is the name of its company ? ");
 		modif = sc.nextLine();
 		if(!"".equals(modif)) {
-			companyID = ServiceCompany.getOneCompany(modif).getID();
+			company = ServiceCompany.getOneCompany(modif);
 		}
 
 		Computer updatedComputer = new Computer.Builder(newName)
 				.setIntroduced(introduced)
 				.setDiscontinued(discontinued)
-				.setCompany_id(companyID)
+				.setCompany(company)
 				.build();
 		
 		ServiceComputer.updateComputer(oldName,  updatedComputer);

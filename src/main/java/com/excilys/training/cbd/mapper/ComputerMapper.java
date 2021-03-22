@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.excilys.training.cbd.model.Company;
 import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.model.ComputerDTO;
 
@@ -19,25 +20,25 @@ public class ComputerMapper {
 	static DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
 	public static Computer resultToComputer(List<Object> list) {
-		Computer computer;
 		Long id = (Long) list.get(0);
 		String name = (String) list.get(1);
+		
+		Computer.Builder builder = new Computer.Builder(name)
+				.setID(id);
+		
 		if(list.size()>2) {
 			LocalDate introduced = (LocalDate) list.get(2);
 			LocalDate discontinued = (LocalDate) list.get(3);
-			Long company_id = (Long) list.get(4);
-			computer = new Computer.Builder(name)
-					.setID(id)
-					.setIntroduced(introduced)
-					.setDiscontinued(discontinued)
-					.setCompany_id(company_id)
-					.build();
-		}else {
-			computer = new Computer.Builder(name)
-					.setID(id)
-					.build();
+			builder = builder.setIntroduced(introduced)
+					.setDiscontinued(discontinued);
+			
+			if(list.get(4).getClass().getName().equals("Company")) {
+				System.out.println(list.get(4));
+				Company company = (Company) list.get(4);
+				builder = builder.setCompany(company);
+			}
 		}
-		return computer;
+		return builder.build();
 	}
 	
 	public static ArrayList<Object> computerToResult(Computer computer) {
@@ -46,14 +47,18 @@ public class ComputerMapper {
 		informations.add(computer.getName());
 		informations.add(Date.valueOf(computer.getIntroduced()));
 		informations.add(Date.valueOf(computer.getDiscontinued()));
-		informations.add(computer.getCompanyID());
+		informations.add(computer.getCompany().getID());
 		return informations;
 	}
 	
-//	public static ComputerDTO computerToDTO(Computer computer) {
-//		company = 
-//		ComputerDTO computerDTO = new ComputerDTO(computer.getID(), computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), String company)
-//		return computerDTO;
-//	}	
+	public static ComputerDTO computerToDTO(Computer computer) {
+		Long idDTO = computer.getID();
+		String nameDTO = computer.getName();
+		String introducedDTO = computer.getIntroduced().format(dateFormat);
+		String discontinuedDTO = computer.getDiscontinued().format(dateFormat) ; 
+		String companyDTO = computer.getCompany().getName() ; 
+		ComputerDTO computerDTO = new ComputerDTO( idDTO, nameDTO, introducedDTO , discontinuedDTO , companyDTO ) ;
+		return computerDTO;
+	}	
 	
 }

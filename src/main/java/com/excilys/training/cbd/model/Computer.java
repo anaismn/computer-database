@@ -8,14 +8,14 @@ public class Computer {
 	private String name = "";
 	private LocalDate introduced = null;
 	private LocalDate discontinued = null;
-	private Long company_id;
+	private Company company = null;
 	
 	private Computer(Builder builder) {
 		this.id = builder.id;
 		this.name = builder.name;
 		this.introduced = builder.introduced;
 		this.discontinued = builder.discontinued;
-		this.company_id = builder.company_id;
+		this.company = builder.company;
 	}
 	
 	public Long getID() {
@@ -34,8 +34,8 @@ public class Computer {
 		return discontinued;
 	}
 	
-	public Long getCompanyID() {
-		return company_id;
+	public Company getCompany() {
+		return company;
 	}
 	
 	//setters
@@ -51,8 +51,8 @@ public class Computer {
 		this.discontinued = discontinued;
 	}
 
-	public void setCompany_id(Long company_id) {
-		this.company_id = company_id;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 	
 	@Override
@@ -60,7 +60,7 @@ public class Computer {
 		return "name : "+name+
 				" - introduced : "+introduced+
 				" - discontinued : "+discontinued+
-				" company id : "+company_id;
+				" company : "+company.getName();
 	}
 	
 	//Builder
@@ -69,7 +69,7 @@ public class Computer {
 		private String name = "";
 		private LocalDate introduced = null;
 		private LocalDate discontinued = null;
-		private Long company_id;
+		private Company company;
 		
 		public Builder(String name) {
 			this.name = name;
@@ -90,8 +90,8 @@ public class Computer {
 			return this;
 		}
 
-		public Builder setCompany_id(Long company_id) {
-			this.company_id = company_id;
+		public Builder setCompany(Company company) {
+			this.company = company;
 			return this;
 		}
 		

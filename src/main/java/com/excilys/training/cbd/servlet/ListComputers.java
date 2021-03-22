@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.training.cbd.model.Company;
 import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.persistence.DAOException;
 import com.excilys.training.cbd.service.ServiceCompany;
@@ -19,18 +20,18 @@ public class ListComputers extends HttpServlet  {
 	
 	ArrayList<Computer> computers;
 	ArrayList<Object> result = new ArrayList<>();
+	ArrayList<Company> companies;
 	
 	public void doGet( HttpServletRequest request, HttpServletResponse response ) 
 		throws ServletException, IOException{
 		
 		try {
 			computers = ServiceComputer.getAllComputers();
+			
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-//		ServiceCompany.getOneCompany(modif);
-		
+		} 
 
 //		computers.forEach((computer) -> System.out.println( " - id : "+ computer.getID() + " = Name : "+computer.getName())) ;
 		request.setAttribute( NBR_COMPUTER, "grogro" );
