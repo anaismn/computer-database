@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.excilys.training.cbd.controller.CollectComputerInfo;
+import com.excilys.training.cbd.controller.Pagination;
 import com.excilys.training.cbd.model.Company;
 import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.service.ServiceCompany;
@@ -37,7 +38,8 @@ public class Menu {
 		case LIST_COMPUTERS:
 			System.out.println("List of All the computers");
 			ArrayList<Computer> computers = ServiceComputer.getAllComputers();
-			computers.forEach((computer) -> System.out.println( " - id : "+ computer.getId() + " = Name : "+computer.getName())) ;
+			Pagination pagination = new Pagination(50, computers);
+			System.out.println(pagination.firstPage());
 			break;
 		case ONE_COMPUTER:
 			System.out.println("Give the name of the computer, you're searching for");
