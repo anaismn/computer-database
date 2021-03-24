@@ -50,5 +50,9 @@ public class Pagination {
 		return this.pages.get(pages.size()-1);
 	}
 	
+	public Page getPageIndex(int index) {
+		return this.pages.get(index);
+	}
+	
 	
 }

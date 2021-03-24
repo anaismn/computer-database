@@ -4,6 +4,8 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
+
+<link href="css/styleSheet.css" rel="stylesheet" media="screen">
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="css/main.css" rel="stylesheet" media="screen">
@@ -14,13 +16,17 @@
             <a class="navbar-brand" href="listComputers"> Application - Computer Database </a>
         </div>
     </header>
-
+    
+<!--     <script src="js/jquery.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="js/addComputer.js"></script>
+    
     <section id="main">
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form action="addComputer" method="POST">
+                    <form id="addComputer" name="addComputer" action="addComputer" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -38,14 +44,14 @@
                                 <label for="company">Company</label>
                                  
                                 <select class="form-control" id="company" name="company">
-                                 	<option value=null > Aucune </option>
+                                 	<option value=null > -- </option>
                                      <c:forEach items="${ listCompanies }" var="company" varStatus="status">
 							            <option value= "${ company.id }" > ${ company.name} </option>
 						       		</c:forEach> 
                                 </select>
                             </div>                  
                         </fieldset>
-                        <div class="actions pull-right">
+                        <div id="add_submit" class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">
                             or
                             <a href="listComputers" class="btn btn-default">Cancel</a>

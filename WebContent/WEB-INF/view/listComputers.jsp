@@ -104,9 +104,9 @@
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
+              <li><a href="/cbd-maven/listComputers?page=1">1</a></li>
+              <li><a href="/cbd-maven/listComputers?page=2">2</a></li>
+              <li><a href="/cbd-maven/listComputers?page=3">3</a></li>
               <li><a href="#">4</a></li>
               <li><a href="#">5</a></li>
               <li>
@@ -116,10 +116,12 @@
             </li>
         </ul>
 
-        <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+        <div class="btn-group btn-group-sm pull-right" role="group">
+         <form id="limitByPages" action="" method="GET">
+	            <button type="submit" class="btn btn-default" name="limitByPages" value="10">10</button>
+	            <button type="submit" class="btn btn-default" name="limitByPages" value="50">50</button>
+	            <button type="submit" class="btn btn-default" name="limitByPages" value="100">100</button>
+            </form>
         </div>
 
     </footer>

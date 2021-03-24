@@ -32,31 +32,38 @@ public class AddComputer extends HttpServlet  {
 	}
 	
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String name = request.getParameter("computerName");
-        System.out.println(name);
-        String introduced = request.getParameter("introduced");
-        String discontinued = request.getParameter("discontinued");
-        String company_id = request.getParameter("company");
-        System.out.println(company_id);
-        Company company = null;
-		try {
-			company = ServiceCompany.getOneCompany(Long.parseLong(company_id));
-		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        ComputerDTO computerDTO = new ComputerDTO(name, introduced, discontinued, company.getName());
-        
-        Computer computer = ComputerMapper.dtoToComputer(computerDTO, company);
-        try {
-			ServiceComputer.setNewComputer(computer);
-		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        response.sendRedirect("/cbd-maven/listComputers");
+    	String name = request.getParameter("computerName");
+    	if (!"".equals(name.trim())) {
+	        String introduced = request.getParameter("introduced");
+	        String discontinued = request.getParameter("discontinued");
+	        String company_id = request.getParameter("company");
+	        Company company = null;
+	        System.out.println(company);
+	        if (!"null".equals(company_id)) {
+	        	System.out.println(null != company_id);
+	        }
+				try {
+					company = ServiceCompany.getOneCompany(Long.parseLong(company_id));
+				} catch (DAOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+	        ComputerDTO computerDTO = new ComputerDTO(name, introduced, discontinued, company.getName());
+	        
+	        Computer computer = ComputerMapper.dtoToComputer(computerDTO, company);
+	        
+	        try {
+				ServiceComputer.setNewComputer(computer);
+			} catch (DAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        
+	        response.sendRedirect("/cbd-maven/listComputers");
+    	} else {
+    		doGet(request, response);
+    	}
     }
 	
 }
