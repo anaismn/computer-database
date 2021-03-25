@@ -21,6 +21,7 @@ public class ListComputers extends HttpServlet  {
 	public static final String LIST_COMPUTERS = "listComputers";
 	public static final String NUMBER_OF_COMPUTERS = "numberOfComputers";
 	public static final String PARAMS_PAGE_NUMBER = "page";
+	public static final String COMPUTERS_BY_PAGE = "limitByPages";
 	public static int limitByPages = 10;
 	public static int pageNumber = 1;
 	ArrayList<Computer> computers;
@@ -38,8 +39,12 @@ public class ListComputers extends HttpServlet  {
 			e.printStackTrace();
 		} 
 		
-		Pagination pagination = new Pagination(limitByPages, computersDTO);
+		if(null !=request.getParameter(COMPUTERS_BY_PAGE)) {
+			limitByPages = Integer.parseInt(request.getParameter(COMPUTERS_BY_PAGE));
+		}
 		
+		Pagination pagination = new Pagination(limitByPages, computersDTO);
+		System.out.println(request.getParameter(PARAMS_PAGE_NUMBER));
 		if(null !=request.getParameter(PARAMS_PAGE_NUMBER)) {
 			pageNumber = Integer.parseInt(request.getParameter(PARAMS_PAGE_NUMBER));
 		}
