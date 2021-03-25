@@ -19,7 +19,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                <c:out value="${ listComputers.size() }" /> Computers found
+                <c:out value="${ numberOfComputers }" /> Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -75,7 +75,7 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                 <c:forEach items="${ listComputers }" var="computer" varStatus="status">
+                 <c:forEach items="${ listComputers.computerDTOs }" var="computer" varStatus="status">
 				    
 				      <tr>
                         <td class="editMode">

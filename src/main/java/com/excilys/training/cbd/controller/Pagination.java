@@ -3,6 +3,7 @@ package com.excilys.training.cbd.controller;
 import java.util.ArrayList;
 
 import com.excilys.training.cbd.model.Computer;
+import com.excilys.training.cbd.model.ComputerDTO;
 import com.excilys.training.cbd.model.Page;
 
 public class Pagination {
@@ -11,17 +12,16 @@ public class Pagination {
 	public int numberOfPages = 0;
 	public ArrayList<Page> pages = new ArrayList<Page>();
 
-	public Pagination(int limitByPage, ArrayList<Computer> computers) {
+	public Pagination(int limitByPage, ArrayList<ComputerDTO> computersDTO) {
 		this.limitByPage = limitByPage;
-		System.out.println(computers.size()/limitByPage);
-		this.numberOfPages = computers.size()/limitByPage ;
-		for(int i=0, j=1; i<computers.size(); i=i+limitByPage, j++) {
+		System.out.println(computersDTO.size()/limitByPage);
+		this.numberOfPages = computersDTO.size()/limitByPage ;
+		for(int i=0, j=1; i<computersDTO.size(); i=i+limitByPage, j++) {
 			if(numberOfPages == pages.size()) {
-				pages.add( new Page(j, computers.subList(i, computers.size())));
+				pages.add( new Page(j, computersDTO.subList(i, computersDTO.size())));
 			}else {
-				pages.add( new Page(j, computers.subList(i, i+limitByPage)));
+				pages.add( new Page(j, computersDTO.subList(i, i+limitByPage)));
 			}
-			System.out.println(pages.size());
 		}
 		
 	}

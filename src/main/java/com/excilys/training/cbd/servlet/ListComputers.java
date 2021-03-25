@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.training.cbd.controller.Pagination;
 import com.excilys.training.cbd.mapper.ComputerMapper;
 import com.excilys.training.cbd.model.Company;
 import com.excilys.training.cbd.model.Computer;
@@ -18,7 +19,10 @@ import com.excilys.training.cbd.service.ServiceComputer;
 
 public class ListComputers extends HttpServlet  {
 	public static final String LIST_COMPUTERS = "listComputers";
-	public static int limitByPages = 50;
+	public static final String NUMBER_OF_COMPUTERS = "numberOfComputers";
+	public static final String PARAMS_PAGE_NUMBER = "page";
+	public static int limitByPages = 10;
+	public static int pageNumber = 1;
 	ArrayList<Computer> computers;
 	ArrayList<Object> result;
 	ArrayList<ComputerDTO> computersDTO;
@@ -34,7 +38,14 @@ public class ListComputers extends HttpServlet  {
 			e.printStackTrace();
 		} 
 		
-		request.setAttribute( LIST_COMPUTERS, computersDTO );
+		Pagination pagination = new Pagination(limitByPages, computersDTO);
+		
+		if(null !=request.getParameter(PARAMS_PAGE_NUMBER)) {
+			pageNumber = Integer.parseInt(request.getParameter(PARAMS_PAGE_NUMBER));
+		}
+		
+		request.setAttribute(NUMBER_OF_COMPUTERS, computersDTO.size());
+		request.setAttribute( LIST_COMPUTERS, pagination.getPageIndex(pageNumber-1) );
 		
 		System.out.println("URI : "+request.getRequestURI());
 		System.out.println(request.getQueryString());
