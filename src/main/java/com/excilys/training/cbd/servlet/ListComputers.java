@@ -23,13 +23,15 @@ public class ListComputers extends HttpServlet  {
 	public static final String PARAMS_PAGE_NUMBER = "page";
 	public static final String COMPUTERS_BY_PAGE = "limitByPages";
 	public static final String PAGE_NUMBER = "pageNumber";
-	public static int limitByPages = 10;
+	public static int limitByPages = 100;
 	public static int pageNumber = 1;
 	ArrayList<Computer> computers;
 	ArrayList<Object> result;
 	ArrayList<ComputerDTO> computersDTO;
 	
 	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException{
+		
+		System.out.println("2/5 = "+2/5 + " | 11/5 = "+11/5);
 		
 		computersDTO= new ArrayList<ComputerDTO>();
 		try {
@@ -51,6 +53,8 @@ public class ListComputers extends HttpServlet  {
 		}
 		
 		request.setAttribute(NUMBER_OF_COMPUTERS, computersDTO.size());
+		System.out.println("MAXXX = " +pagination.numberOfPages);
+		request.setAttribute("numberOfPages", pagination.numberOfPages);
 		request.setAttribute(PAGE_NUMBER, pageNumber);
 		request.setAttribute( LIST_COMPUTERS, pagination.getPageIndex(pageNumber-1) );
 		

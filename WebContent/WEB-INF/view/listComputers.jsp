@@ -104,16 +104,13 @@
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <c:forEach var="i" begin="0" end="4" step="1">
-              	<li><a href="/cbd-maven/listComputers?page=<c:out value="${ pageNumber+i }" />"><c:out value="${ pageNumber+i }" /></a></li>
+              <c:forEach var="i" begin="1" end="5" step="1">
+              	<c:if test= "${ fn:substringBefore( (pageNumber div 5), '.')*5 +i <= numberOfPages }" >
+              		<li><a href="/cbd-maven/listComputers?page=<c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i  }" />"><c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i }" /></a></li>
+			  	</c:if>
 			  </c:forEach>
-<%--               <li><a href="/cbd-maven/listComputers?page=<c:out value="${ pageNumber }" />"><c:out value="${ pageNumber }" /></a></li>
-              <li><a href="/cbd-maven/listComputers?page=2"><c:out value="${ pageNumber+1 }" /></a></li>
-              <li><a href="/cbd-maven/listComputers?page=3"><c:out value="${ pageNumber+2 }" /></a></li>
-              <li><a href="#"><c:out value="${ pageNumber+3 }" /></a></li>
-              <li><a href="#"><c:out value="${ pageNumber+4 }" /></a></li> --%>
               <li>
-                <a href="/cbd-maven/listComputers?page=" aria-label="Next">
+                <a href="/cbd-maven/listComputers?page=<c:out value="${ numberOfPages }" />" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

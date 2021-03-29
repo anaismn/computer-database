@@ -14,10 +14,12 @@ public class Pagination {
 
 	public Pagination(int limitByPage, ArrayList<ComputerDTO> computersDTO) {
 		this.limitByPage = limitByPage;
-		System.out.println(computersDTO.size()/limitByPage);
-		this.numberOfPages = computersDTO.size()/limitByPage ;
+		System.out.println("nombre de computers : "+ computersDTO.size());
+		System.out.println("limites par pages : "+ limitByPage);
+		System.out.println("maxi : "+ (int) Math.ceil((float)computersDTO.size()/limitByPage));
+		this.numberOfPages = (int) Math.ceil((float) computersDTO.size()/limitByPage) ;
 		for(int i=0, j=1; i<computersDTO.size(); i=i+limitByPage, j++) {
-			if(numberOfPages == pages.size()) {
+			if(numberOfPages-1 == pages.size()) {
 				pages.add( new Page(j, computersDTO.subList(i, computersDTO.size())));
 			}else {
 				pages.add( new Page(j, computersDTO.subList(i, i+limitByPage)));

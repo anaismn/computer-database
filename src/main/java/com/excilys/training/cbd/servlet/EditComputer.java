@@ -46,7 +46,6 @@ public class EditComputer extends HttpServlet  {
     	if (!"".equals(name.trim())) {
 	        String introduced = request.getParameter("introduced");
 	        String discontinued = request.getParameter("discontinued");
-	        System.out.println("company = "+request.getParameter("companyId"));
 	        String company_id = request.getParameter("companyId");
 	        Company company = null;
 	        System.out.println(company_id);
@@ -73,7 +72,6 @@ public class EditComputer extends HttpServlet  {
 	        
 	        response.sendRedirect("/cbd-maven/listComputers");
     	} else {
-    		System.out.println("ERREREE");
     		doGet(request, response);
     	}
     }
