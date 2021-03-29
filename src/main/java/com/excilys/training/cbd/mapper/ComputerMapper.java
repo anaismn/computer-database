@@ -50,11 +50,12 @@ public class ComputerMapper {
 	}
 	
 	public static ComputerDTO computerToDTO(Computer computer) {
+		Long idDTO = computer.getId();
 		String nameDTO = computer.getName();
 		String introducedDTO = null!= computer.getIntroduced() ? computer.getIntroduced().format(dateFormat): "";
 		String discontinuedDTO = null != computer.getDiscontinued() ? computer.getDiscontinued().format(dateFormat) : "" ; 
 		String companyDTO = null != computer.getCompany() ? computer.getCompany().getName() : "" ; 
-		ComputerDTO computerDTO = new ComputerDTO(null, nameDTO, introducedDTO , discontinuedDTO , companyDTO ) ;
+		ComputerDTO computerDTO = new ComputerDTO(idDTO, nameDTO, introducedDTO , discontinuedDTO , companyDTO ) ;
 		return computerDTO;
 	}	
 	

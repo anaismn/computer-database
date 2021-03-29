@@ -53,7 +53,6 @@ public class ListComputers extends HttpServlet  {
 		}
 		
 		request.setAttribute(NUMBER_OF_COMPUTERS, computersDTO.size());
-		System.out.println("MAXXX = " +pagination.numberOfPages);
 		request.setAttribute("numberOfPages", pagination.numberOfPages);
 		request.setAttribute(PAGE_NUMBER, pageNumber);
 		request.setAttribute( LIST_COMPUTERS, pagination.getPageIndex(pageNumber-1) );
@@ -68,11 +67,26 @@ public class ListComputers extends HttpServlet  {
 		    System.out.println("Le paramètre " + nomParametre  + " . " + request.getParameter(nomParametre));
 	   }
 	    
-	    System.out.println(request.getParameter(COMPUTERS_BY_PAGE));
-	    
-		
 		
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/view/listComputers.jsp" ).forward( request, response );
 	}
+	
+	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		  String[] computerToDelete = request.getParameterValues("cb");
+		  for(String computerId : computerToDelete) {
+			  try {
+				  System.out.println("DELEEETTTEEEEE ~ " +Long.parseLong(computerId));  
+				ServiceComputer.deleteComputer( Long.parseLong(computerId));
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		  }
+		  
+		  doGet(request, response);
+	  }
 
 }

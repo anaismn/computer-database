@@ -37,9 +37,9 @@
             </div>
         </div>
 
-        <form id="deleteForm" action="#" method="POST">
+        <form id="deleteForm" action="listComputers" method="POST">
             <input type="hidden" name="selection" value="">
-        </form>
+        
 
         <div class="container" style="margin-top: 10px;">
             <table class="table table-striped table-bordered">
@@ -79,7 +79,7 @@
 				    
 				      <tr>
                         <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
+                            <input type="checkbox" name="cb" class="cb" value="<c:out value="${ computer.id }"/>" >
                         </td>
                         <td>
                             <a href="/cbd-maven/editComputer?computer=<c:out value="${ computer.name }"/>" onclick=""><c:out value="${ computer.name }" /></a>
@@ -94,6 +94,9 @@
                 </tbody>
             </table>
         </div>
+        
+        </form>
+        
     </section>
 
     <footer class="navbar-fixed-bottom">
