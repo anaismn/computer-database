@@ -31,62 +31,63 @@ public class ListComputers extends HttpServlet  {
 	
 	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException{
 		
-		System.out.println("2/5 = "+2/5 + " | 11/5 = "+11/5);
-		
-		computersDTO= new ArrayList<ComputerDTO>();
-		try {
-			computers = ServiceComputer.getAllComputers();
-			computers.forEach((computer) -> computersDTO.add(ComputerMapper.computerToDTO(computer)));
-		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
-		if(null !=request.getParameter(COMPUTERS_BY_PAGE)) {
-			limitByPages = Integer.parseInt(request.getParameter(COMPUTERS_BY_PAGE));
-		}
-		
-		Pagination pagination = new Pagination(limitByPages, computersDTO);
-		System.out.println(request.getParameter(PARAMS_PAGE_NUMBER));
-		if(null !=request.getParameter(PARAMS_PAGE_NUMBER)) {
-			pageNumber = Integer.parseInt(request.getParameter(PARAMS_PAGE_NUMBER));
-		}
-		
-		request.setAttribute(NUMBER_OF_COMPUTERS, computersDTO.size());
-		request.setAttribute("numberOfPages", pagination.numberOfPages);
-		request.setAttribute(PAGE_NUMBER, pageNumber);
-		request.setAttribute( LIST_COMPUTERS, pagination.getPageIndex(pageNumber-1) );
-		
-		System.out.println("URI : "+request.getRequestURI());
-		System.out.println(request.getQueryString());
-		
-		Enumeration parametres = request.getParameterNames();
-	    System.out.println("Affichage des informations sur les paramètres de la requête");
-	    while (parametres.hasMoreElements()) {
-		    String nomParametre = (String) parametres.nextElement(); 
-		    System.out.println("Le paramètre " + nomParametre  + " . " + request.getParameter(nomParametre));
-	   }
-	    
-		
+		String nameSearched = request.getParameter("search");
+		 System.out.println(nameSearched);
+		 computersDTO= new ArrayList<ComputerDTO>();
+		 if(null != nameSearched) {
+			 try {
+				computers = ServiceComputer.getComputersFiltered(nameSearched);
+				displayComputers(request);
+			} catch (DAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			 request.setAttribute("nameSearched", nameSearched);
+		 }else {
+			try {
+				computers = ServiceComputer.getAllComputers();
+				displayComputers(request);
+			} catch (DAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		 }
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/view/listComputers.jsp" ).forward( request, response );
 	}
 	
 	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		  String[] computerToDelete = request.getParameterValues("cb");
-		  for(String computerId : computerToDelete) {
-			  try {
-				  System.out.println("DELEEETTTEEEEE ~ " +Long.parseLong(computerId));  
-				ServiceComputer.deleteComputer( Long.parseLong(computerId));
-			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (DAOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		  if(null != computerToDelete) {
+			  for(String computerId : computerToDelete) {
+				  try {
+					ServiceComputer.deleteComputer( Long.parseLong(computerId));
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				} catch (DAOException e) {
+					e.printStackTrace();
+				}
+			  }
 		  }
 		  
-		  doGet(request, response);
+		 this.getServletContext().getRequestDispatcher( "/WEB-INF/view/listComputers.jsp" ).forward( request, response );
+	  }
+	  
+	  private void displayComputers( HttpServletRequest request) {
+		  computers.forEach((computer) -> computersDTO.add(ComputerMapper.computerToDTO(computer)));
+		  if(null !=request.getParameter(COMPUTERS_BY_PAGE)) {
+				limitByPages = Integer.parseInt(request.getParameter(COMPUTERS_BY_PAGE));
+			}
+			
+			Pagination pagination = new Pagination(limitByPages, computersDTO);
+			System.out.println(request.getParameter(PARAMS_PAGE_NUMBER));
+			if(null !=request.getParameter(PARAMS_PAGE_NUMBER)) {
+				pageNumber = Integer.parseInt(request.getParameter(PARAMS_PAGE_NUMBER));
+			}
+			
+			request.setAttribute(NUMBER_OF_COMPUTERS, computersDTO.size());
+			request.setAttribute("numberOfPages", pagination.numberOfPages);
+			request.setAttribute(PAGE_NUMBER, pageNumber);
+			request.setAttribute( LIST_COMPUTERS, pagination.getPageIndex(pageNumber-1) );
 	  }
 
 }

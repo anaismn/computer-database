@@ -51,6 +51,24 @@ public class ServiceComputer {
 		return computer;
 	}
 	
+	public static ArrayList<Computer> getComputersFiltered(String nameSearched) throws DAOException {
+		ArrayList<Computer> computers = new ArrayList<Computer>();
+		ArrayList<Object> result = computerDao.getComputersFiltered(nameSearched);
+		ArrayList<Company> companies = ServiceCompany.getAllCompanies();
+		for(int i=0; i<result.size(); i=i+5) {
+			if(NO_COMPANY != result.get(i+4)) {
+				for(Company company : companies) {
+					if (company.getId() == result.get(i+4) ) {
+						result.set(i+4, company); 
+						break;
+					}
+				}
+			}
+			computers.add( ComputerMapper.resultToComputer(result.subList(i, i+5)) );
+		}
+		return computers;
+	}
+	
 	public static void setNewComputer(Computer newComputer) throws DAOException {
 		ArrayList<Object> informations = ComputerMapper.computerToResult(newComputer);
 		computerDao.setNewComputer(informations);

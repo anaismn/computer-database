@@ -86,6 +86,29 @@ public class ComputerDAO {
 		}
 	}
 	
+	public ArrayList<Object> getComputersFiltered(String nameSearched) throws DAOException {
+		try(	Connection connexion = connectionManager.getConnection();
+				PreparedStatement preStatement = connexion.prepareStatement( "SELECT * FROM computer WHERE name LIKE  ? ;" );
+				) {
+			preStatement.setString( 1, "%" + nameSearched + "%");
+			ArrayList<Object> result = new ArrayList<>();
+			ResultSet resultat = preStatement.executeQuery();
+			
+			while ( resultat.next() ) {
+				result.add(resultat.getLong("id"));
+				result.add(resultat.getString("name"));
+				LocalDate introduced = null != resultat.getDate("introduced") ? resultat.getDate("introduced").toLocalDate() : null;
+				result.add(introduced);
+				LocalDate discontinued = null!= resultat.getDate("discontinued")? resultat.getDate("discontinued").toLocalDate() : null;
+				result.add(discontinued);
+				result.add(resultat.getLong("company_id"));
+			}
+			return result;
+		}catch ( SQLException e ) {
+			throw new DAOException( e );
+		}
+	}
+	
 	public void setNewComputer(ArrayList<Object> informations) throws DAOException {
 		int resultat = 0;
 		try (Connection connexion = connectionManager.getConnection();
