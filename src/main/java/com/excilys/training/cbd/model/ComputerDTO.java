@@ -2,17 +2,26 @@ package com.excilys.training.cbd.model;
 
 public class ComputerDTO {
 
+	private Long id;
 	private String name;
 	private String introduced ;
 	private String discontinued ;
-	private String company = "";
+	private String company;
 
-	public ComputerDTO(String name, String introduced, String discontinued, String company) {
-		super();
+	public ComputerDTO(Long id, String name, String introduced, String discontinued, String company) {
+		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		this.company = company;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public String getName() {

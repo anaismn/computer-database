@@ -82,7 +82,7 @@
                             <input type="checkbox" name="cb" class="cb" value="0">
                         </td>
                         <td>
-                            <a href="editComputer.html" onclick=""><c:out value="${ computer.name }" /></a>
+                            <a href="/cbd-maven/editComputer?computer=<c:out value="${ computer.name }"/>" onclick=""><c:out value="${ computer.name }" /></a>
                         </td>
                          <td><c:out value="${ computer.introduced }" /></td>
                         <td> <c:out value="${ computer.discontinued }" /> </td>
@@ -100,17 +100,20 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="#" aria-label="Previous">
+                    <a href="/cbd-maven/listComputers?page=1" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="/cbd-maven/listComputers?page=1">1</a></li>
-              <li><a href="/cbd-maven/listComputers?page=2">2</a></li>
-              <li><a href="/cbd-maven/listComputers?page=3">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
+              <c:forEach var="i" begin="0" end="4" step="1">
+              	<li><a href="/cbd-maven/listComputers?page=<c:out value="${ pageNumber+i }" />"><c:out value="${ pageNumber+i }" /></a></li>
+			  </c:forEach>
+<%--               <li><a href="/cbd-maven/listComputers?page=<c:out value="${ pageNumber }" />"><c:out value="${ pageNumber }" /></a></li>
+              <li><a href="/cbd-maven/listComputers?page=2"><c:out value="${ pageNumber+1 }" /></a></li>
+              <li><a href="/cbd-maven/listComputers?page=3"><c:out value="${ pageNumber+2 }" /></a></li>
+              <li><a href="#"><c:out value="${ pageNumber+3 }" /></a></li>
+              <li><a href="#"><c:out value="${ pageNumber+4 }" /></a></li> --%>
               <li>
-                <a href="#" aria-label="Next">
+                <a href="/cbd-maven/listComputers?page=" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

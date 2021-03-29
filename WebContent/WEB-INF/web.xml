@@ -37,5 +37,15 @@
 		<servlet-name>AddComputer</servlet-name>
 		<url-pattern>/addComputer</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>EditComputer</servlet-name>
+		<servlet-class>com.excilys.training.cbd.servlet.EditComputer</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>EditComputer</servlet-name>
+		<url-pattern>/editComputer</url-pattern>
+	</servlet-mapping>
   
 </web-app>

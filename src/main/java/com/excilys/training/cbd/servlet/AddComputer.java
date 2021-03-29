@@ -49,7 +49,7 @@ public class AddComputer extends HttpServlet  {
 					e.printStackTrace();
 				}
 				
-	        ComputerDTO computerDTO = new ComputerDTO(name, introduced, discontinued, company.getName());
+	        ComputerDTO computerDTO = new ComputerDTO(null, name, introduced, discontinued, company.getName());
 	        
 	        Computer computer = ComputerMapper.dtoToComputer(computerDTO, company);
 	        

@@ -43,8 +43,8 @@ public class ComputerMapper {
 		ArrayList<Object> informations = new ArrayList<Object>();
 		informations.add(computer.getId());
 		informations.add(computer.getName());
-		informations.add(Date.valueOf(computer.getIntroduced()));
-		informations.add(Date.valueOf(computer.getDiscontinued()));
+		informations.add(null != computer.getIntroduced() ? Date.valueOf(computer.getIntroduced()) : null);
+		informations.add(null != computer.getDiscontinued() ? Date.valueOf(computer.getDiscontinued()) : null);
 		informations.add(computer.getCompany().getId());
 		return informations;
 	}
@@ -54,14 +54,15 @@ public class ComputerMapper {
 		String introducedDTO = null!= computer.getIntroduced() ? computer.getIntroduced().format(dateFormat): "";
 		String discontinuedDTO = null != computer.getDiscontinued() ? computer.getDiscontinued().format(dateFormat) : "" ; 
 		String companyDTO = null != computer.getCompany() ? computer.getCompany().getName() : "" ; 
-		ComputerDTO computerDTO = new ComputerDTO( nameDTO, introducedDTO , discontinuedDTO , companyDTO ) ;
+		ComputerDTO computerDTO = new ComputerDTO(null, nameDTO, introducedDTO , discontinuedDTO , companyDTO ) ;
 		return computerDTO;
 	}	
 	
 	public static Computer dtoToComputer(ComputerDTO computerDTO, Company company) {
 		String name = computerDTO.getName();
-		LocalDate introduced = LocalDate.parse(computerDTO.getIntroduced());
-		LocalDate discontinued = LocalDate.parse(computerDTO.getDiscontinued());
+		System.out.println(computerDTO.getDiscontinued());
+		LocalDate introduced = ""!=  computerDTO.getIntroduced() ? LocalDate.parse(computerDTO.getIntroduced()) : null;
+		LocalDate discontinued = ""!=  computerDTO.getDiscontinued() ? LocalDate.parse(computerDTO.getDiscontinued()) : null;
 		Computer computer = new Computer.Builder(name)
 				.setIntroduced(introduced)
 				.setDiscontinued(discontinued)

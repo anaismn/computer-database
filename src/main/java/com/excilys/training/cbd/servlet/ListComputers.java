@@ -22,6 +22,7 @@ public class ListComputers extends HttpServlet  {
 	public static final String NUMBER_OF_COMPUTERS = "numberOfComputers";
 	public static final String PARAMS_PAGE_NUMBER = "page";
 	public static final String COMPUTERS_BY_PAGE = "limitByPages";
+	public static final String PAGE_NUMBER = "pageNumber";
 	public static int limitByPages = 10;
 	public static int pageNumber = 1;
 	ArrayList<Computer> computers;
@@ -50,6 +51,7 @@ public class ListComputers extends HttpServlet  {
 		}
 		
 		request.setAttribute(NUMBER_OF_COMPUTERS, computersDTO.size());
+		request.setAttribute(PAGE_NUMBER, pageNumber);
 		request.setAttribute( LIST_COMPUTERS, pagination.getPageIndex(pageNumber-1) );
 		
 		System.out.println("URI : "+request.getRequestURI());
@@ -62,7 +64,7 @@ public class ListComputers extends HttpServlet  {
 		    System.out.println("Le paramètre " + nomParametre  + " . " + request.getParameter(nomParametre));
 	   }
 	    
-	    System.out.println(request.getParameter("limitByPages"));
+	    System.out.println(request.getParameter(COMPUTERS_BY_PAGE));
 	    
 		
 		

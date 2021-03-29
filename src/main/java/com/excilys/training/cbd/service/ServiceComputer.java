@@ -37,10 +37,18 @@ public class ServiceComputer {
 	}
 	
 	public static Computer getOneComputer(String nameSearched) throws DAOException {
-		ArrayList<Computer> computers = new ArrayList<Computer>();
 		ArrayList<Object> result = computerDao.getOneComputer(nameSearched);
-		computers.add( ComputerMapper.resultToComputer(result) );
-		return computers.get(0);
+		ArrayList<Company> companies = ServiceCompany.getAllCompanies();
+		if(NO_COMPANY != result.get(4)) {
+			for(Company company : companies) {
+				if (company.getId() == result.get(4) ) {
+					result.set(4, company); 
+					break;
+				}
+			}
+		}
+		Computer computer  = ComputerMapper.resultToComputer(result) ;
+		return computer;
 	}
 	
 	public static void setNewComputer(Computer newComputer) throws DAOException {

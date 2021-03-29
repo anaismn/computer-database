@@ -74,9 +74,9 @@ public class ComputerDAO {
 			while ( resultat.next() ) {
 				result.add(resultat.getLong("id"));
 				result.add(resultat.getString("name"));
-				LocalDate introduced = resultat.getDate("introduced").toLocalDate();
+				LocalDate introduced = null != resultat.getDate("introduced") ? resultat.getDate("introduced").toLocalDate() : null;
 				result.add(introduced);
-				LocalDate discontinued = resultat.getDate("discontinued").toLocalDate();
+				LocalDate discontinued = null!= resultat.getDate("discontinued")? resultat.getDate("discontinued").toLocalDate() : null;
 				result.add(discontinued);
 				result.add(resultat.getLong("company_id"));
 			}

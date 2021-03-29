@@ -11,9 +11,14 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <a class="navbar-brand" href="listComputers"> Application - Computer Database </a>
         </div>
     </header>
+    
+    <script src="js/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="js/validator.js"></script>
+    
     <section id="main">
         <div class="container">
             <div class="row">
@@ -28,27 +33,32 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" placeholder="Computer name">
+                                <input type="text" class="form-control" id="computerName" placeholder="Computer name" value=<c:out value="${ computer.name }" />>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date">
+                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date" value=<c:out value="${ computer.introduced }" />>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date">
+                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date" value=<c:out value="${ computer.discontinued }"/> >
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
-                                <select class="form-control" id="companyId" >
-                                    <option value="0">--</option>
+                                <select class="form-control" id="companyId"  value=<c:out value="${ computer.company }"/> >
+                                    <option value=null > -- </option>
+                                      <c:forEach items="${ listCompanies }" var="company" varStatus="status">
+	                                     <option value= "${ company.id }" 
+	                                     	${ company.name == computer.company ? 'selected="selected"' : ''} > ${ company.name}
+	                                      </option>
+						       		 </c:forEach>  
                                 </select>
                             </div>            
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="Edit" class="btn btn-primary">
                             or
-                            <a href="dashboard.html" class="btn btn-default">Cancel</a>
+                            <a href="listComputers" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>
