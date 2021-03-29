@@ -41,4 +41,41 @@ public class EditComputer extends HttpServlet  {
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/view/editComputer.jsp" ).forward( request, response );
 	}
 	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String name = request.getParameter("computerName");
+    	if (!"".equals(name.trim())) {
+	        String introduced = request.getParameter("introduced");
+	        String discontinued = request.getParameter("discontinued");
+	        System.out.println("company = "+request.getParameter("companyId"));
+	        String company_id = request.getParameter("companyId");
+	        Company company = null;
+	        System.out.println(company_id);
+	        if (!"".equals(company_id)) {
+	        	System.out.println(null != company_id);
+	        }
+			try {
+				company = ServiceCompany.getOneCompany(Long.parseLong(company_id));
+			} catch (DAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+				
+	        ComputerDTO computerDTO = new ComputerDTO(null, name, introduced, discontinued, company.getName());
+	        
+	        Computer computer = ComputerMapper.dtoToComputer(computerDTO, company);
+	        
+	        try {
+				ServiceComputer.setNewComputer(computer);
+			} catch (DAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        
+	        response.sendRedirect("/cbd-maven/listComputers");
+    	} else {
+    		System.out.println("ERREREE");
+    		doGet(request, response);
+    	}
+    }
+	
 }
