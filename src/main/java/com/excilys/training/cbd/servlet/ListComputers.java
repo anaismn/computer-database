@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.excilys.training.cbd.controller.Pagination;
 import com.excilys.training.cbd.mapper.ComputerMapper;
@@ -30,7 +31,7 @@ public class ListComputers extends HttpServlet  {
 	ArrayList<ComputerDTO> computersDTO;
 	
 	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException{
-		
+		HttpSession session=request.getSession(); 
 		String nameSearched = request.getParameter("search");
 		 System.out.println(nameSearched);
 		 computersDTO= new ArrayList<ComputerDTO>();

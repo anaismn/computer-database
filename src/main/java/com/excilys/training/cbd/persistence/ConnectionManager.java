@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
 
+import com.zaxxer.hikari.HikariDataSource;
+
 public class ConnectionManager {
 
 	private static final String FICHIER_PROPERTIES       = "dao.properties";
@@ -18,11 +20,14 @@ public class ConnectionManager {
 	private String              password;
 	
 	private static ConnectionManager instance;
+	private static HikariDataSource datasource = new HikariDataSource();
 
-	private ConnectionManager( String url, String username, String password ) {
-		this.url = url;
-		this.username = username;
-		this.password = password;
+
+	private ConnectionManager(String driver, String url, String username, String password ) {
+		datasource.setDriverClassName(driver);
+		datasource.setJdbcUrl(url);
+		datasource.setUsername(username);
+		datasource.setPassword(password);
 	}
 
 	public static ConnectionManager getInstance() throws DAOConfigurationException {
@@ -56,13 +61,13 @@ public class ConnectionManager {
 				throw new DAOConfigurationException( "Le driver est introuvable dans le classpath.", e );
 			}
 	
-			instance = new ConnectionManager( url, nomUtilisateur, motDePasse );
+			instance = new ConnectionManager( driver, url, nomUtilisateur, motDePasse );
 		}
 		return instance;
 	}
 
 	 	Connection getConnection() throws SQLException {
-		return DriverManager.getConnection( url, username, password );
+		return datasource.getConnection();
 	}
 
 }
