@@ -24,21 +24,18 @@ public class ListComputers extends HttpServlet  {
 	public static final String PARAMS_PAGE_NUMBER = "page";
 	public static final String COMPUTERS_BY_PAGE = "limitByPages";
 	public static final String PAGE_NUMBER = "pageNumber";
-	public static int limitByPages = 100;
-	public static int pageNumber = 1;
-	ArrayList<Computer> computers;
-	ArrayList<Object> result;
-	ArrayList<ComputerDTO> computersDTO;
+
 	
 	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException{
+		ArrayList<Computer> computers;
+		
 		HttpSession session=request.getSession(); 
 		String nameSearched = request.getParameter("search");
 		 System.out.println(nameSearched);
-		 computersDTO= new ArrayList<ComputerDTO>();
 		 if(null != nameSearched) {
 			 try {
 				computers = ServiceComputer.getComputersFiltered(nameSearched);
-				displayComputers(request);
+				displayComputers(request, session, computers);
 			} catch (DAOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -47,7 +44,7 @@ public class ListComputers extends HttpServlet  {
 		 }else {
 			try {
 				computers = ServiceComputer.getAllComputers();
-				displayComputers(request);
+				displayComputers(request, session, computers);
 			} catch (DAOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -73,22 +70,23 @@ public class ListComputers extends HttpServlet  {
 		 this.getServletContext().getRequestDispatcher( "/WEB-INF/view/listComputers.jsp" ).forward( request, response );
 	  }
 	  
-	  private void displayComputers( HttpServletRequest request) {
+	  private void displayComputers(HttpServletRequest request, HttpSession session, ArrayList<Computer> computers) {
+		  ArrayList<ComputerDTO> computersDTO = new ArrayList<ComputerDTO>();
+		  int limitByPages = 100;
+		  int pageNumber = 1;
 		  computers.forEach((computer) -> computersDTO.add(ComputerMapper.computerToDTO(computer)));
-		  if(null !=request.getParameter(COMPUTERS_BY_PAGE)) {
-				limitByPages = Integer.parseInt(request.getParameter(COMPUTERS_BY_PAGE));
+		  if(null != request.getParameter(COMPUTERS_BY_PAGE)) {
+				limitByPages = Integer.parseInt((String) request.getParameter(COMPUTERS_BY_PAGE));
 			}
 			
 			Pagination pagination = new Pagination(limitByPages, computersDTO);
-			System.out.println(request.getParameter(PARAMS_PAGE_NUMBER));
 			if(null !=request.getParameter(PARAMS_PAGE_NUMBER)) {
-				pageNumber = Integer.parseInt(request.getParameter(PARAMS_PAGE_NUMBER));
+				pageNumber = Integer.parseInt((String) request.getParameter(PARAMS_PAGE_NUMBER));
 			}
-			
-			request.setAttribute(NUMBER_OF_COMPUTERS, computersDTO.size());
-			request.setAttribute("numberOfPages", pagination.numberOfPages);
-			request.setAttribute(PAGE_NUMBER, pageNumber);
-			request.setAttribute( LIST_COMPUTERS, pagination.getPageIndex(pageNumber-1) );
+			session.setAttribute(NUMBER_OF_COMPUTERS, computersDTO.size());
+			session.setAttribute("numberOfPages", pagination.numberOfPages);
+			session.setAttribute(PAGE_NUMBER, pageNumber);
+			session.setAttribute( LIST_COMPUTERS, pagination.getPageIndex(pageNumber-1) );
 	  }
 
 }

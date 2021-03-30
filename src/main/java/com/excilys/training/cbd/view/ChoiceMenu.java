@@ -7,7 +7,9 @@ public enum ChoiceMenu {
 	ONE_COMPUTER(3, "Show computer details (the detailed information of only one computer)"), 
 	CREATE_COMPUTER(4, "Create a computer"), 
 	UPDATE_COMPUTER(5, "Update a computer"), 
-	DELETE_COMPUTER(6, "Delete a computer");
+	DELETE_COMPUTER(6, "Delete a computer"),
+	DELETE_COMPANY(7, "Delete a company and its computers");
+	
 	
 	private int number;
 	private String action;

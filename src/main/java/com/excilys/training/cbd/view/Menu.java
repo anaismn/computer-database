@@ -7,8 +7,10 @@ import java.util.Scanner;
 
 import com.excilys.training.cbd.controller.CollectComputerInfo;
 import com.excilys.training.cbd.controller.Pagination;
+import com.excilys.training.cbd.mapper.ComputerMapper;
 import com.excilys.training.cbd.model.Company;
 import com.excilys.training.cbd.model.Computer;
+import com.excilys.training.cbd.model.ComputerDTO;
 import com.excilys.training.cbd.service.ServiceCompany;
 import com.excilys.training.cbd.service.ServiceComputer;
 
@@ -38,7 +40,9 @@ public class Menu {
 		case LIST_COMPUTERS:
 			System.out.println("List of All the computers");
 			ArrayList<Computer> computers = ServiceComputer.getAllComputers();
-			Pagination pagination = new Pagination(50, computers);
+			ArrayList<ComputerDTO> computersDTO = new ArrayList<ComputerDTO>();
+			computers.forEach((computer) -> computersDTO.add(ComputerMapper.computerToDTO(computer)));
+			Pagination pagination = new Pagination(50, computersDTO);
 			System.out.println(pagination.firstPage());
 			break;
 		case ONE_COMPUTER:
@@ -59,16 +63,29 @@ public class Menu {
 			break;
 		case DELETE_COMPUTER:
 			System.out.println("Give the name of the computer, you want to delete");
-			String delateName = sc.nextLine();
+			String deleteName = sc.nextLine();
 			System.out.println("Are you sure ? y/n");
 			String valide = sc.nextLine();
 			if(valide.equals("Y") || valide.equals("y")){
-				ServiceComputer.deleteComputer(delateName);
+				ServiceComputer.deleteComputer(deleteName);
 			}else{
 				System.out.println("Cancel ");
 			}
 			//Long deleteID = Long.parseLong(sc.nextLine()) ;
 
+			break;
+			
+		case DELETE_COMPANY:
+			System.out.println("Give the name of the company, you want to delete");
+			deleteName = sc.nextLine();
+			System.out.println("Are you sure ? y/n");
+			valide = sc.nextLine();
+			if(valide.equals("Y") || valide.equals("y")){
+				Company comapnyToDelete = ServiceCompany.getOneCompany(deleteName);
+				ServiceCompany.deleteCompany(comapnyToDelete.getId());
+			}else{
+				System.out.println("Cancel ");
+			}
 			break;
 		default :
 			System.out.println("Vueillez choisir parmi ce qui est proposé");  

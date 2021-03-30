@@ -33,4 +33,8 @@ public class ServiceCompany {
 		return companies.get(0);
 	}
 	
+	public static void deleteCompany(Long idSearched) throws DAOException {
+		
+	}
+	
 }
