@@ -14,3 +14,7 @@ input.error, textarea.error {
     font-weight: 300;
     color: red;
 }
+
+.glyphicon {
+    font-size: 50px;
+}

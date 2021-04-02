@@ -1,5 +1,7 @@
 package com.excilys.training.cbd.model;
 
+import java.util.Comparator;
+
 public class ComputerDTO {
 
 	private Long id;
@@ -47,6 +49,14 @@ public class ComputerDTO {
 	}
 	public void setCompany(String company) {
 		this.company = company;
+	}
+	
+	public class SortByName implements Comparator<ComputerDTO>
+	{
+	    public int compare(ComputerDTO a, ComputerDTO b)
+	    {
+	        return a.name.compareTo(b.name);
+	    }
 	}
 	
 	

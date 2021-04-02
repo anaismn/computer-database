@@ -7,12 +7,12 @@ public class Page {
 
 	private List<ComputerDTO> computerDTOs;
 	public int pageNumber;
-	
-	public Page(int pageNumber, List<ComputerDTO> computerDTOs){
+
+	public Page(int pageNumber, List<ComputerDTO> computerDTOs) {
 		this.computerDTOs = computerDTOs;
 		this.pageNumber = pageNumber;
 	}
-	
+
 //	public Page(int j, List<ComputerDTO> subList) {
 //		// TODO Auto-generated constructor stub
 //	}
@@ -32,13 +32,13 @@ public class Page {
 	public void setPageNumber(int pageNumber) {
 		this.pageNumber = pageNumber;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		String pageDisplay = "";
-		for(ComputerDTO computerDTO : this.computerDTOs) {
-			pageDisplay += " - Name : "+computerDTO.getName()+"\n" ;
+		for (ComputerDTO computerDTO : this.computerDTOs) {
+			pageDisplay += " - Name : " + computerDTO.getName() + "\n";
 		}
-			return pageDisplay;
+		return pageDisplay;
 	}
 
 }

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
+
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="${pageContext.request.contextPath}/css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet" media="screen">
@@ -57,7 +58,10 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+	                         <a id="sort"  href="?sort=name">
+	                            <span class="glyphicon glyphicon-sort-by-alphabet"></span> 
+                            </a>
+                            Computer name 
                         </th>
                         <th>
                             Introduced date
@@ -75,7 +79,7 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                 <c:forEach items="${ listComputers.computerDTOs }" var="computer" varStatus="status">
+                 <c:forEach items="${ listComputers }" var="computer" varStatus="status">
 				    
 				      <tr>
                         <td class="editMode">
