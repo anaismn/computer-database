@@ -3,11 +3,17 @@ package com.excilys.training.cbd.servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.training.cbd.mapper.ComputerMapper;
 import com.excilys.training.cbd.model.Computer;
@@ -15,6 +21,8 @@ import com.excilys.training.cbd.model.ComputerDTO;
 import com.excilys.training.cbd.persistence.DAOException;
 import com.excilys.training.cbd.service.ServiceComputer;
 
+@Component
+@WebServlet("/listComputers")
 public class ListComputers extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String LIST_COMPUTERS = "listComputers";
@@ -24,6 +32,15 @@ public class ListComputers extends HttpServlet {
 	public static final String PAGE_NUMBER = "pageNumber";
 	public static final String NUMBER_OF_PAGES = "numberOfPages";
 	public static final String NAME_SEARCHED = "nameSearched";
+
+	@Autowired
+	private ServiceComputer serviceComputer;
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+		super.init(config);
+	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
@@ -57,7 +74,7 @@ public class ListComputers extends HttpServlet {
 		if (null != computerToDelete) {
 			for (String computerId : computerToDelete) {
 				try {
-					ServiceComputer.deleteComputer(Long.parseLong(computerId));
+					serviceComputer.deleteComputer(Long.parseLong(computerId));
 				} catch (NumberFormatException e) {
 					e.printStackTrace();
 				} catch (DAOException e) {
@@ -74,9 +91,11 @@ public class ListComputers extends HttpServlet {
 		ArrayList<Computer> computers = new ArrayList<>();
 		try {
 			if (null != nameSearched) {
-				computers = ServiceComputer.getComputersFiltered(nameSearched, orderBy, limitByPages, pageNumber);
+				computers = serviceComputer.getComputersFiltered(nameSearched, orderBy, limitByPages, pageNumber);
 			} else {
-				computers = ServiceComputer.getAllComputers(orderBy, limitByPages, pageNumber);
+				System.out.println(
+						"orderBy : " + orderBy + " & limitByPages : " + limitByPages + " pageNumber : " + pageNumber);
+				computers = serviceComputer.getAllComputers(orderBy, limitByPages, pageNumber);
 			}
 		} catch (DAOException e) {
 			e.printStackTrace();
@@ -90,8 +109,8 @@ public class ListComputers extends HttpServlet {
 
 		computers.forEach((computer) -> computersDTO.add(ComputerMapper.computerToDTO(computer)));
 
-		session.setAttribute(NUMBER_OF_COMPUTERS, ServiceComputer.countComputers());
-		session.setAttribute(NUMBER_OF_PAGES, ServiceComputer.countComputers() / limitByPages);
+		session.setAttribute(NUMBER_OF_COMPUTERS, serviceComputer.countComputers());
+		session.setAttribute(NUMBER_OF_PAGES, serviceComputer.countComputers() / limitByPages);
 		session.setAttribute(PAGE_NUMBER, pageNumber);
 		session.setAttribute(LIST_COMPUTERS, computersDTO);
 	}

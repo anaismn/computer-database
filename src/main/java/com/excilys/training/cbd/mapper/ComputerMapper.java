@@ -1,15 +1,10 @@
 package com.excilys.training.cbd.mapper;
 
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.excilys.training.cbd.model.Company;
 import com.excilys.training.cbd.model.Computer;

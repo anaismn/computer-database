@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
-  <display-name>cbd-maven</display-name>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
+	version="3.0">
+	
+  <display-name>cdb-maven</display-name>
   <welcome-file-list>
-  	<welcome-file>listComputers</welcome-file>
+  <!-- 	<welcome-file>listComputers</welcome-file> -->
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
     <welcome-file>index.jsp</welcome-file>
@@ -11,14 +15,15 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   
-     <jsp-config>
+<!--      <jsp-config>
         <jsp-property-group>
             <url-pattern>*.jsp</url-pattern>
             <include-prelude>/WEB-INF/taglibs.jsp</include-prelude>
         </jsp-property-group>
-    </jsp-config> 
+    </jsp-config>  -->
+ 
 
-  	<servlet>
+<!--   	<servlet>
 		<servlet-name>ListComputers</servlet-name>
 		<servlet-class>com.excilys.training.cbd.servlet.ListComputers</servlet-class>
 	</servlet>
@@ -46,6 +51,6 @@
 	<servlet-mapping>
 		<servlet-name>EditComputer</servlet-name>
 		<url-pattern>/editComputer</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping> -->
   
 </web-app>

@@ -9,8 +9,16 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
+
+@Repository
+@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class ComputerDAO {
-	private static ConnectionManager connectionManager;
 	private static final String COUNT_COMPUTERS = "SELECT COUNT(*) FROM computer;";
 	private static final String PAGINATION = " LIMIT ? OFFSET ? ;";
 	private static final String SELCT_ALL_COMPUTERS = "SELECT * FROM computer LEFT JOIN company ON company.id = company_id ORDER BY computer.";
@@ -19,13 +27,12 @@ public class ComputerDAO {
 	private static final String CREATE_COMPUTER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE id = ? ";
 	private static final String UPDATE_COMPUTER = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE name = ? ;";
-
-	public ComputerDAO() {
-		ComputerDAO.connectionManager = ConnectionManager.getInstance();
-	}
+	
+	@Autowired
+	private DataSource dataSource;
 
 	public int countComputers() throws DAOException {
-		try (Connection connexion = connectionManager.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				Statement statement = connexion.createStatement();) {
 
 			ResultSet resultat = statement.executeQuery(COUNT_COMPUTERS);
@@ -41,7 +48,7 @@ public class ComputerDAO {
 	}
 
 	public ArrayList<Object> getAllComputers(String columnOrdering, int limit, int offset) throws DAOException {
-		try (Connection connexion = connectionManager.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				Statement preStatement = connexion.createStatement();) {
 
 			ResultSet resultat = preStatement.executeQuery(SELCT_ALL_COMPUTERS + columnOrdering + " LIMIT " + limit + " OFFSET " + offset + ";");
@@ -54,7 +61,7 @@ public class ComputerDAO {
 	}
 
 	public ArrayList<Object> getOneComputer(Long id) throws DAOException {
-		try (Connection connexion = connectionManager.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement(SELCT_ONE_COMPUTER);) {
 
 			Long searchID = id;
@@ -68,7 +75,7 @@ public class ComputerDAO {
 	}
 
 	public ArrayList<Object> getOneComputer(String nameSearched) throws DAOException {
-		try (Connection connexion = connectionManager.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preStatement = connexion
 						.prepareStatement("SELECT * FROM computer WHERE name = ? ;");) {
 			preStatement.setString(1, nameSearched);
@@ -82,7 +89,7 @@ public class ComputerDAO {
 
 	public ArrayList<Object> getComputersFiltered(String nameSearched, String columnOrdering, int limit, int offset)
 			throws DAOException {
-		try (Connection connexion = connectionManager.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preStatement = connexion
 						.prepareStatement(FILTER_COMPUTERS + columnOrdering + PAGINATION);) {
 			preStatement.setString(1, "%" + nameSearched + "%");
@@ -99,7 +106,7 @@ public class ComputerDAO {
 
 	public void setNewComputer(ArrayList<Object> informations) throws DAOException {
 		int resultat = 0;
-		try (Connection connexion = connectionManager.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement(CREATE_COMPUTER);) {
 			preStatement.setString(1, (String) informations.get(1));
 			preStatement.setDate(2, (Date) informations.get(2));
@@ -117,7 +124,7 @@ public class ComputerDAO {
 	}
 
 	public void deleteComputer(Long id) throws DAOException {
-		try (Connection connexion = connectionManager.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement(DELETE_COMPUTER);) {
 
 			preStatement.setLong(1, id);
@@ -134,7 +141,7 @@ public class ComputerDAO {
 	}
 
 	public void deleteComputer(String name) throws DAOException {
-		try (Connection connexion = connectionManager.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement("DELETE FROM computer WHERE name = ? ");) {
 			preStatement.setString(1, name);
 			int resultat = preStatement.executeUpdate();
@@ -150,7 +157,7 @@ public class ComputerDAO {
 
 	public void updateComputer(String oldName, ArrayList<Object> updatedInfo) throws DAOException {
 		int resultat = 0;
-		try (Connection connexion = connectionManager.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement(UPDATE_COMPUTER);) {
 			preStatement.setString(1, (String) updatedInfo.get(1));
 			preStatement.setDate(2, (Date) updatedInfo.get(2));
