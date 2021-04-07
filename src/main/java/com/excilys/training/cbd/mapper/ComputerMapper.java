@@ -22,7 +22,6 @@ public class ComputerMapper {
 
 		if (list.size() > 2) {
 			LocalDate introduced = (LocalDate) list.get(2);
-			System.out.println("LOCALDATE : " + (LocalDate) list.get(3));
 			LocalDate discontinued = (LocalDate) list.get(3);
 			builder = builder.setIntroduced(introduced).setDiscontinued(discontinued);
 			if (list.get(4).getClass().getName().equals("com.excilys.training.cbd.model.Company")) {

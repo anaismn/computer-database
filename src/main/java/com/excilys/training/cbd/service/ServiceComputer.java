@@ -31,7 +31,6 @@ public class ServiceComputer {
 
 	public ArrayList<Computer> getAllComputers(String columnOrdering, int limit, int offset)
 			throws DAOException {
-		System.out.println("EFSELEBDFOR");
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		ArrayList<Object> result = computerDao.getAllComputers(columnOrdering, limit, offset);
 		for (int i = 0; i < result.size(); i = i + 7) {

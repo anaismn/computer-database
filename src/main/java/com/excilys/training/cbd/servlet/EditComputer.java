@@ -45,11 +45,8 @@ public class EditComputer extends HttpServlet {
 		try {
 			companies = serviceCompany.getAllCompanies();
 
-			System.out.println(request.getParameter(COMPUTER_TO_EDIT));
 			Computer computer = serviceComputer.getOneComputer(request.getParameter(COMPUTER_TO_EDIT));
-			System.out.println(computer.getCompany());
 			ComputerDTO computerDTO = ComputerMapper.computerToDTO(computer);
-			System.out.println(computerDTO.getCompany());
 			request.setAttribute(LIST_COMPANIES, companies);
 			request.setAttribute(COMPUTER_TO_EDIT, computerDTO);
 		} catch (DAOException e) {

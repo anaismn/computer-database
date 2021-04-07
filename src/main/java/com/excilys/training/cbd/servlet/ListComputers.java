@@ -54,7 +54,7 @@ public class ListComputers extends HttpServlet {
 
 		int pageNumber = null != request.getParameter(PARAMS_PAGE_NUMBER)
 				? Integer.parseInt((String) request.getParameter(PARAMS_PAGE_NUMBER))
-				: 0;
+				: 1;
 		ArrayList<Computer> computers = retrieveComputers(nameSearched, orderBy, limitByPages, pageNumber);
 		try {
 			displayComputers(request, session, computers, limitByPages, pageNumber);
@@ -88,14 +88,13 @@ public class ListComputers extends HttpServlet {
 
 	private ArrayList<Computer> retrieveComputers(String nameSearched, String orderBy, int limitByPages,
 			int pageNumber) {
+		int offset = (pageNumber - 1) * limitByPages;
 		ArrayList<Computer> computers = new ArrayList<>();
 		try {
 			if (null != nameSearched) {
-				computers = serviceComputer.getComputersFiltered(nameSearched, orderBy, limitByPages, pageNumber);
+				computers = serviceComputer.getComputersFiltered(nameSearched, orderBy, limitByPages, offset);
 			} else {
-				System.out.println(
-						"orderBy : " + orderBy + " & limitByPages : " + limitByPages + " pageNumber : " + pageNumber);
-				computers = serviceComputer.getAllComputers(orderBy, limitByPages, pageNumber);
+				computers = serviceComputer.getAllComputers(orderBy, limitByPages, offset);
 			}
 		} catch (DAOException e) {
 			e.printStackTrace();
@@ -109,6 +108,7 @@ public class ListComputers extends HttpServlet {
 
 		computers.forEach((computer) -> computersDTO.add(ComputerMapper.computerToDTO(computer)));
 
+		session.setAttribute(COMPUTERS_BY_PAGE, limitByPages);
 		session.setAttribute(NUMBER_OF_COMPUTERS, serviceComputer.countComputers());
 		session.setAttribute(NUMBER_OF_PAGES, serviceComputer.countComputers() / limitByPages);
 		session.setAttribute(PAGE_NUMBER, pageNumber);

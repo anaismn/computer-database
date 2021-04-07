@@ -80,8 +80,21 @@ public class ComputerDAO {
 			
 			preStatement.setString(1, nameSearched);
 			ResultSet resultat = preStatement.executeQuery();
-			System.out.println("##### " + resultat);
-			return mapperResult(resultat);
+			ArrayList<Object> result = new ArrayList<>();
+			while (resultat.next()) {
+				result.add(resultat.getLong("id"));
+				result.add(resultat.getString("name"));
+				LocalDate introduced = null != resultat.getDate("introduced")
+						? resultat.getDate("introduced").toLocalDate()
+						: null;
+				result.add(introduced);
+				LocalDate discontinued = null != resultat.getDate("discontinued")
+						? resultat.getDate("discontinued").toLocalDate()
+						: null;
+				result.add(discontinued);
+				result.add(resultat.getLong("company_id"));
+			}
+			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DAOException(e);
@@ -180,7 +193,6 @@ public class ComputerDAO {
 	public ArrayList<Object> mapperResult(ResultSet resultat) throws DAOException {
 		ArrayList<Object> result = new ArrayList<>();
 		try {
-			System.out.println("~~~ " + resultat.next());
 			while (resultat.next()) {
 				result.add(resultat.getLong("computer.id"));
 				result.add(resultat.getString("name"));
@@ -196,7 +208,6 @@ public class ComputerDAO {
 				result.add(resultat.getLong("company.id"));
 				result.add(resultat.getString("company.name"));
 			}
-			System.out.println("##### " + result);
 			return result;
 		} catch (SQLException e) {
 			throw new DAOException(e);

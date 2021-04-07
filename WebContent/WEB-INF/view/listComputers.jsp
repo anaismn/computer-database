@@ -1,3 +1,9 @@
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
+<%@ page isELIgnored="false"%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -113,11 +119,11 @@
               </li>
               <c:forEach var="i" begin="1" end="5" step="1">
               	<c:if test= "${ fn:substringBefore( (pageNumber div 5), '.')*5 +i <= numberOfPages }" >
-              		<li><a href="/cbd-maven/listComputers?page=<c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i  }" />"><c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i }" /></a></li>
+              		<li><a href="/cbd-maven/listComputers?limitByPages=<c:out value="${ limitByPages }" />&page=<c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i  }" />"><c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i }" /></a></li>
 			  	</c:if>
 			  </c:forEach>
               <li>
-                <a href="/cbd-maven/listComputers?page=<c:out value="${ numberOfPages }" />" aria-label="Next">
+                <a href="/cbd-maven/listComputers?limitByPages=<c:out value="${ limitByPages }" />&page=<c:out value="${ numberOfPages }" />" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
