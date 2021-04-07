@@ -22,7 +22,7 @@ public class ComputerDAO {
 	private static final String COUNT_COMPUTERS = "SELECT COUNT(*) FROM computer;";
 	private static final String PAGINATION = " LIMIT ? OFFSET ? ;";
 	private static final String SELCT_ALL_COMPUTERS = "SELECT * FROM computer LEFT JOIN company ON company.id = company_id ORDER BY computer.";
-	private static final String SELCT_ONE_COMPUTER = "SELECT * FROM computer WHERE id = ? ;";
+	private static final String SELCT_ONE_COMPUTER = "SELECT * FROM computer WHERE name = ? ";
 	private static final String FILTER_COMPUTERS = "SELECT * FROM computer WHERE name LIKE  ? ";
 	private static final String CREATE_COMPUTER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE id = ? ";
@@ -76,13 +76,14 @@ public class ComputerDAO {
 
 	public ArrayList<Object> getOneComputer(String nameSearched) throws DAOException {
 		try (Connection connexion = dataSource.getConnection();
-				PreparedStatement preStatement = connexion
-						.prepareStatement("SELECT * FROM computer WHERE name = ? ;");) {
+				PreparedStatement preStatement = connexion.prepareStatement(SELCT_ONE_COMPUTER);) {
+			
 			preStatement.setString(1, nameSearched);
-
 			ResultSet resultat = preStatement.executeQuery();
+			System.out.println("##### " + resultat);
 			return mapperResult(resultat);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DAOException(e);
 		}
 	}
@@ -179,6 +180,7 @@ public class ComputerDAO {
 	public ArrayList<Object> mapperResult(ResultSet resultat) throws DAOException {
 		ArrayList<Object> result = new ArrayList<>();
 		try {
+			System.out.println("~~~ " + resultat.next());
 			while (resultat.next()) {
 				result.add(resultat.getLong("computer.id"));
 				result.add(resultat.getString("name"));
@@ -194,6 +196,7 @@ public class ComputerDAO {
 				result.add(resultat.getLong("company.id"));
 				result.add(resultat.getString("company.name"));
 			}
+			System.out.println("##### " + result);
 			return result;
 		} catch (SQLException e) {
 			throw new DAOException(e);

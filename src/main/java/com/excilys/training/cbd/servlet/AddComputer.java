@@ -3,10 +3,16 @@ package com.excilys.training.cbd.servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.training.cbd.mapper.ComputerMapper;
 import com.excilys.training.cbd.model.Company;
@@ -16,14 +22,27 @@ import com.excilys.training.cbd.persistence.DAOException;
 import com.excilys.training.cbd.service.ServiceCompany;
 import com.excilys.training.cbd.service.ServiceComputer;
 
+@Component
+@WebServlet("/addComputer")
 public class AddComputer extends HttpServlet {
 
 	public static final String LIST_COMPANIES = "listCompanies";
 
+	@Autowired
+	private ServiceComputer serviceComputer;
+	@Autowired
+	ServiceCompany serviceCompany;
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+		super.init(config);
+	}
+
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ArrayList<Company> companies = new ArrayList<>();
 		try {
-			companies = ServiceCompany.getAllCompanies();
+			companies = serviceCompany.getAllCompanies();
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
@@ -44,7 +63,7 @@ public class AddComputer extends HttpServlet {
 				System.out.println(null != company_id);
 			}
 			try {
-				company = ServiceCompany.getOneCompany(Long.parseLong(company_id));
+				company = serviceCompany.getOneCompany(Long.parseLong(company_id));
 			} catch (DAOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -55,7 +74,7 @@ public class AddComputer extends HttpServlet {
 			Computer computer = ComputerMapper.dtoToComputer(computerDTO, company);
 
 			try {
-				ServiceComputer.setNewComputer(computer);
+				serviceComputer.setNewComputer(computer);
 			} catch (DAOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -22,7 +22,9 @@ public class ServiceComputer {
 
 	@Autowired
 	ComputerDAO computerDao;
-
+	@Autowired
+	ServiceCompany serviceCompany;
+	
 	public int countComputers() throws DAOException {
 		return computerDao.countComputers();
 	}
@@ -47,7 +49,7 @@ public class ServiceComputer {
 
 	public Computer getOneComputer(String nameSearched) throws DAOException {
 		ArrayList<Object> result = computerDao.getOneComputer(nameSearched);
-		ArrayList<Company> companies = ServiceCompany.getAllCompanies();
+		ArrayList<Company> companies = serviceCompany.getAllCompanies();
 		if (NO_COMPANY != result.get(4)) {
 			for (Company company : companies) {
 				if (company.getId() == result.get(4)) {
@@ -64,7 +66,7 @@ public class ServiceComputer {
 			int offset) throws DAOException {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		ArrayList<Object> result = computerDao.getComputersFiltered(nameSearched, columnOrdering, limit, offset);
-		ArrayList<Company> companies = ServiceCompany.getAllCompanies();
+		ArrayList<Company> companies = serviceCompany.getAllCompanies();
 		for (int i = 0; i < result.size(); i = i + 5) {
 			if (NO_COMPANY != result.get(i + 4)) {
 				for (Company company : companies) {
