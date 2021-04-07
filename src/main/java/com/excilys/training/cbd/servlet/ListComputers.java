@@ -45,22 +45,23 @@ public class ListComputers extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 
-		String nameSearched = null != session.getAttribute(NAME_SEARCHED) ? (String) session.getAttribute(NAME_SEARCHED) : "";
+		String nameSearched = null != session.getAttribute(NAME_SEARCHED) ? (String) session.getAttribute(NAME_SEARCHED)
+				: "";
 		if (null != request.getParameter("search")) {
-			nameSearched =  request.getParameter("search");
-			
+			nameSearched = request.getParameter("search");
+
 		}
 		String orderBy = null != request.getParameter("sort") ? request.getParameter("sort") : "id";
 
 		int limitByPages = null != session.getAttribute(COMPUTERS_BY_PAGE)
 				? (int) session.getAttribute(COMPUTERS_BY_PAGE)
 				: 100;
-		
+
 		if (null != request.getParameter(COMPUTERS_BY_PAGE)) {
 			limitByPages = Integer.parseInt((String) request.getParameter(COMPUTERS_BY_PAGE));
-			
+
 		}
-		
+
 		int pageNumber = null != request.getParameter(PARAMS_PAGE_NUMBER)
 				? Integer.parseInt((String) request.getParameter(PARAMS_PAGE_NUMBER))
 				: 1;
@@ -98,8 +99,7 @@ public class ListComputers extends HttpServlet {
 				}
 			}
 		}
-
-		this.getServletContext().getRequestDispatcher("/WEB-INF/view/listComputers.jsp").forward(request, response);
+		doGet(request, response);
 	}
 
 	private ArrayList<Computer> retrieveComputers(String nameSearched, String orderBy, int limitByPages,
@@ -127,7 +127,7 @@ public class ListComputers extends HttpServlet {
 
 		session.setAttribute(COMPUTERS_BY_PAGE, limitByPages);
 		session.setAttribute(NUMBER_OF_COMPUTERS, count);
-		session.setAttribute(NUMBER_OF_PAGES, count / limitByPages + 1);
+		session.setAttribute(NUMBER_OF_PAGES, (count - 1) / limitByPages + 1);
 		session.setAttribute(PAGE_NUMBER, pageNumber);
 		session.setAttribute(LIST_COMPUTERS, computersDTO);
 		session.setAttribute(NAME_SEARCHED, nameSearched);
