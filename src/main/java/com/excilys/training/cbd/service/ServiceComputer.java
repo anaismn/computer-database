@@ -24,19 +24,18 @@ public class ServiceComputer {
 	ComputerDAO computerDao;
 	@Autowired
 	ServiceCompany serviceCompany;
-	
-	public int countComputers() throws DAOException {
-		return computerDao.countComputers();
+
+	public int countComputers(String nameSearched) throws DAOException {
+		return computerDao.countComputers(nameSearched);
 	}
 
-	public ArrayList<Computer> getAllComputers(String columnOrdering, int limit, int offset)
-			throws DAOException {
+	public ArrayList<Computer> getAllComputers(String columnOrdering, int limit, int offset) throws DAOException {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		ArrayList<Object> result = computerDao.getAllComputers(columnOrdering, limit, offset);
 		for (int i = 0; i < result.size(); i = i + 7) {
-				Company company = CompanyMapper.resultToCompany(result.subList(i + 5, i + 7));
-				result.set(i + 4, company);
-			
+			Company company = CompanyMapper.resultToCompany(result.subList(i + 5, i + 7));
+			result.set(i + 4, company);
+
 			computers.add(ComputerMapper.resultToComputer(result.subList(i, i + 5)));
 		}
 		return computers;
@@ -61,20 +60,14 @@ public class ServiceComputer {
 		return computer;
 	}
 
-	public ArrayList<Computer> getComputersFiltered(String nameSearched, String columnOrdering, int limit,
-			int offset) throws DAOException {
+	public ArrayList<Computer> getComputersFiltered(String nameSearched, String columnOrdering, int limit, int offset)
+			throws DAOException {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		ArrayList<Object> result = computerDao.getComputersFiltered(nameSearched, columnOrdering, limit, offset);
-		ArrayList<Company> companies = serviceCompany.getAllCompanies();
-		for (int i = 0; i < result.size(); i = i + 5) {
-			if (NO_COMPANY != result.get(i + 4)) {
-				for (Company company : companies) {
-					if (company.getId() == result.get(i + 4)) {
-						result.set(i + 4, company);
-						break;
-					}
-				}
-			}
+		for (int i = 0; i < result.size(); i = i + 7) {
+			Company company = CompanyMapper.resultToCompany(result.subList(i + 5, i + 7));
+			result.set(i + 4, company);
+
 			computers.add(ComputerMapper.resultToComputer(result.subList(i, i + 5)));
 		}
 		return computers;

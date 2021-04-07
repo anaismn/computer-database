@@ -19,23 +19,23 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class ComputerDAO {
-	private static final String COUNT_COMPUTERS = "SELECT COUNT(*) FROM computer;";
-	private static final String PAGINATION = " LIMIT ? OFFSET ? ;";
+	private static final String COUNT_COMPUTERS = "SELECT COUNT(*) FROM computer WHERE computer.name LIKE ? ";
 	private static final String SELCT_ALL_COMPUTERS = "SELECT * FROM computer LEFT JOIN company ON company.id = company_id ORDER BY computer.";
 	private static final String SELCT_ONE_COMPUTER = "SELECT * FROM computer WHERE name = ? ";
-	private static final String FILTER_COMPUTERS = "SELECT * FROM computer WHERE name LIKE  ? ";
+	private static final String FILTER_COMPUTERS = "SELECT * FROM computer LEFT JOIN company ON company.id = company_id WHERE computer.name LIKE ? ORDER BY computer.";
 	private static final String CREATE_COMPUTER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE id = ? ";
 	private static final String UPDATE_COMPUTER = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE name = ? ;";
-	
+
 	@Autowired
 	private DataSource dataSource;
 
-	public int countComputers() throws DAOException {
+	public int countComputers(String nameSearched) throws DAOException {
 		try (Connection connexion = dataSource.getConnection();
-				Statement statement = connexion.createStatement();) {
+				PreparedStatement preStatement = connexion.prepareStatement(COUNT_COMPUTERS);) {
 
-			ResultSet resultat = statement.executeQuery(COUNT_COMPUTERS);
+			preStatement.setString(1, "%" + nameSearched + "%");
+			ResultSet resultat = preStatement.executeQuery();
 			int count = 0;
 			while (resultat.next()) {
 				count = resultat.getInt(1);
@@ -48,10 +48,10 @@ public class ComputerDAO {
 	}
 
 	public ArrayList<Object> getAllComputers(String columnOrdering, int limit, int offset) throws DAOException {
-		try (Connection connexion = dataSource.getConnection();
-				Statement preStatement = connexion.createStatement();) {
+		try (Connection connexion = dataSource.getConnection(); Statement preStatement = connexion.createStatement();) {
 
-			ResultSet resultat = preStatement.executeQuery(SELCT_ALL_COMPUTERS + columnOrdering + " LIMIT " + limit + " OFFSET " + offset + ";");
+			ResultSet resultat = preStatement
+					.executeQuery(SELCT_ALL_COMPUTERS + columnOrdering + " LIMIT " + limit + " OFFSET " + offset + ";");
 			return mapperResult(resultat);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -77,7 +77,7 @@ public class ComputerDAO {
 	public ArrayList<Object> getOneComputer(String nameSearched) throws DAOException {
 		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preStatement = connexion.prepareStatement(SELCT_ONE_COMPUTER);) {
-			
+
 			preStatement.setString(1, nameSearched);
 			ResultSet resultat = preStatement.executeQuery();
 			ArrayList<Object> result = new ArrayList<>();
@@ -104,12 +104,10 @@ public class ComputerDAO {
 	public ArrayList<Object> getComputersFiltered(String nameSearched, String columnOrdering, int limit, int offset)
 			throws DAOException {
 		try (Connection connexion = dataSource.getConnection();
-				PreparedStatement preStatement = connexion
-						.prepareStatement(FILTER_COMPUTERS + columnOrdering + PAGINATION);) {
+				PreparedStatement preStatement = connexion.prepareStatement(
+						FILTER_COMPUTERS + columnOrdering + " LIMIT " + limit + " OFFSET " + offset);) {
 			preStatement.setString(1, "%" + nameSearched + "%");
 
-			preStatement.setInt(1, limit);
-			preStatement.setInt(2, offset);
 			ResultSet resultat = preStatement.executeQuery();
 			return mapperResult(resultat);
 

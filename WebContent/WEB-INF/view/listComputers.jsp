@@ -119,18 +119,18 @@
               </li>
               <c:forEach var="i" begin="1" end="5" step="1">
               	<c:if test= "${ fn:substringBefore( (pageNumber div 5), '.')*5 +i <= numberOfPages }" >
-              		<li><a href="/cbd-maven/listComputers?limitByPages=<c:out value="${ limitByPages }" />&page=<c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i  }" />"><c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i }" /></a></li>
+              		<li><a href="/cbd-maven/listComputers?page=<c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i  }" />"><c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i }" /></a></li>
 			  	</c:if>
 			  </c:forEach>
               <li>
-                <a href="/cbd-maven/listComputers?limitByPages=<c:out value="${ limitByPages }" />&page=<c:out value="${ numberOfPages }" />" aria-label="Next">
+                <a href="/cbd-maven/listComputers?page=<c:out value="${ numberOfPages }" />" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
         </ul>
 
         <div class="btn-group btn-group-sm pull-right" role="group">
-         <form id="limitByPages" action="" method="GET">
+         <form action="">
 	            <button type="submit" class="btn btn-default" name="limitByPages" value="10">10</button>
 	            <button type="submit" class="btn btn-default" name="limitByPages" value="50">50</button>
 	            <button type="submit" class="btn btn-default" name="limitByPages" value="100">100</button>

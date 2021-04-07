@@ -45,19 +45,35 @@ public class ListComputers extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 
-		String nameSearched = request.getParameter("search");
+		String nameSearched = null != session.getAttribute(NAME_SEARCHED) ? (String) session.getAttribute(NAME_SEARCHED) : "";
+		if (null != request.getParameter("search")) {
+			nameSearched =  request.getParameter("search");
+			
+		}
 		String orderBy = null != request.getParameter("sort") ? request.getParameter("sort") : "id";
 
-		int limitByPages = null != request.getParameter(COMPUTERS_BY_PAGE)
-				? Integer.parseInt((String) request.getParameter(COMPUTERS_BY_PAGE))
+		int limitByPages = null != session.getAttribute(COMPUTERS_BY_PAGE)
+				? (int) session.getAttribute(COMPUTERS_BY_PAGE)
 				: 100;
-
+		
+		if (null != request.getParameter(COMPUTERS_BY_PAGE)) {
+			limitByPages = Integer.parseInt((String) request.getParameter(COMPUTERS_BY_PAGE));
+			
+		}
+		
 		int pageNumber = null != request.getParameter(PARAMS_PAGE_NUMBER)
 				? Integer.parseInt((String) request.getParameter(PARAMS_PAGE_NUMBER))
 				: 1;
 		ArrayList<Computer> computers = retrieveComputers(nameSearched, orderBy, limitByPages, pageNumber);
+		int count = 0;
 		try {
-			displayComputers(request, session, computers, limitByPages, pageNumber);
+			count = serviceComputer.countComputers(nameSearched);
+		} catch (DAOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			displayComputers(request, session, computers, limitByPages, pageNumber, count, nameSearched);
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -96,6 +112,7 @@ public class ListComputers extends HttpServlet {
 			} else {
 				computers = serviceComputer.getAllComputers(orderBy, limitByPages, offset);
 			}
+
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
@@ -103,16 +120,17 @@ public class ListComputers extends HttpServlet {
 	}
 
 	private void displayComputers(HttpServletRequest request, HttpSession session, ArrayList<Computer> computers,
-			int limitByPages, int pageNumber) throws DAOException {
+			int limitByPages, int pageNumber, int count, String nameSearched) throws DAOException {
 		ArrayList<ComputerDTO> computersDTO = new ArrayList<ComputerDTO>();
 
 		computers.forEach((computer) -> computersDTO.add(ComputerMapper.computerToDTO(computer)));
 
 		session.setAttribute(COMPUTERS_BY_PAGE, limitByPages);
-		session.setAttribute(NUMBER_OF_COMPUTERS, serviceComputer.countComputers());
-		session.setAttribute(NUMBER_OF_PAGES, serviceComputer.countComputers() / limitByPages);
+		session.setAttribute(NUMBER_OF_COMPUTERS, count);
+		session.setAttribute(NUMBER_OF_PAGES, count / limitByPages + 1);
 		session.setAttribute(PAGE_NUMBER, pageNumber);
 		session.setAttribute(LIST_COMPUTERS, computersDTO);
+		session.setAttribute(NAME_SEARCHED, nameSearched);
 	}
 
 }
