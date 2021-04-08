@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
@@ -16,7 +17,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan({ "com.excilys.training.cbd.service", 
+@ComponentScan({ "com.excilys.training.cbd.service", "com.excilys.training.cbd.mapper", 
 	"com.excilys.training.cbd.persistence", 
 	"com.excilys.training.cbd.servlet" })
 public class SpringWebConfig  implements WebApplicationInitializer {
@@ -29,6 +30,11 @@ public class SpringWebConfig  implements WebApplicationInitializer {
 		HikariConfig hikariConf = new HikariConfig(FICHIER_PROPERTIES);
 		return new HikariDataSource(hikariConf);
 	}
+	
+	 @Bean
+    public JdbcTemplate getJdbcTemplate(HikariDataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {

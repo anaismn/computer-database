@@ -1,6 +1,6 @@
 package com.excilys.training.cbd.service;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,23 +19,22 @@ public class ServiceCompany {
 
 	@Autowired
 	CompanyDAO companyDao;
+	@Autowired
+	CompanyMapper companyMapper;
 
-	public ArrayList<Company> getAllCompanies() throws DAOException {
-		ArrayList<Company> companies = new ArrayList<Company>();
-		TreeMap<Long, String> result = companyDao.getAllCompanies();
-		result.forEach((id, name) -> companies.add(CompanyMapper.resultToCompany(name, id)));
-		return companies;
+	public List<Company> getAllCompanies() throws DAOException {
+		return companyDao.getAllCompanies();
 	}
 
 	public Company getOneCompany(String nameSearched) throws DAOException {
 		TreeMap<Long, String> result = companyDao.getOneCompany(nameSearched);
-		Company company = CompanyMapper.resultToCompany(nameSearched, result.firstKey());
+		Company company = companyMapper.resultToCompany(nameSearched, result.firstKey());
 		return company;
 	}
 
 	public Company getOneCompany(Long idSearched) throws DAOException {
 		TreeMap<Long, String> result = companyDao.getOneCompany(idSearched);
-		Company company = CompanyMapper.resultToCompany(result.get(idSearched), idSearched);
+		Company company = companyMapper.resultToCompany(result.get(idSearched), idSearched);
 		return company;
 	}
 

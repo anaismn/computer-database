@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.List;
 import java.util.TreeMap;
 
 import javax.sql.DataSource;
@@ -12,7 +12,11 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import com.excilys.training.cbd.mapper.CompanyMapper;
+import com.excilys.training.cbd.model.Company;
 
 @Repository
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -25,24 +29,17 @@ public class CompanyDAO {
 
 	@Autowired
 	private DataSource dataSource;
-
-	public TreeMap<Long, String> getAllCompanies() throws DAOException {
-		try (Connection connexion = dataSource.getConnection();
-				Statement statement = connexion.createStatement();) {
-			TreeMap<Long, String> companies = new TreeMap<Long, String>();
-			ResultSet resultat = statement.executeQuery(SELECT_ALL_COMPANIES);
-
-			while (resultat.next()) {
-				Long id = resultat.getLong("id");
-				String name = resultat.getString("name");
-				companies.put(id, name);
-			}
-
-			return companies;
-		} catch (SQLException e) {
-			throw new DAOException(e);
-		}
+	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
+	
+	CompanyDAO(DataSource dataSource){
+		jdbcTemplate.setDataSource(dataSource);
 	}
+	
+
+	public List<Company> getAllCompanies() {
+		return jdbcTemplate.query(SELECT_ALL_COMPANIES, new CompanyMapper());
+	}
+
 
 	public TreeMap<Long, String> getOneCompany(String nameSearched) throws DAOException {
 		try (Connection connexion = dataSource.getConnection();

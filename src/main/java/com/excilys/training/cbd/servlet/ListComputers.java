@@ -35,6 +35,8 @@ public class ListComputers extends HttpServlet {
 
 	@Autowired
 	private ServiceComputer serviceComputer;
+	@Autowired
+	ComputerMapper computerMapper;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -123,7 +125,7 @@ public class ListComputers extends HttpServlet {
 			int limitByPages, int pageNumber, int count, String nameSearched) throws DAOException {
 		ArrayList<ComputerDTO> computersDTO = new ArrayList<ComputerDTO>();
 
-		computers.forEach((computer) -> computersDTO.add(ComputerMapper.computerToDTO(computer)));
+		computers.forEach((computer) -> computersDTO.add(computerMapper.computerToDTO(computer)));
 
 		session.setAttribute(COMPUTERS_BY_PAGE, limitByPages);
 		session.setAttribute(NUMBER_OF_COMPUTERS, count);

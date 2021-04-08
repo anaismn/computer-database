@@ -6,15 +6,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.training.cbd.model.Company;
 import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.model.ComputerDTO;
 
+@Component
 public class ComputerMapper {
 
 	static DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-	public static Computer resultToComputer(List<Object> list) {
+	public Computer resultToComputer(List<Object> list) {
 		Long id = (Long) list.get(0);
 		String name = (String) list.get(1);
 
@@ -32,7 +35,7 @@ public class ComputerMapper {
 		return builder.build();
 	}
 
-	public static ArrayList<Object> computerToResult(Computer computer) {
+	public ArrayList<Object> computerToResult(Computer computer) {
 		ArrayList<Object> informations = new ArrayList<Object>();
 		informations.add(computer.getId());
 		informations.add(computer.getName());
@@ -42,7 +45,7 @@ public class ComputerMapper {
 		return informations;
 	}
 
-	public static ComputerDTO computerToDTO(Computer computer) {
+	public ComputerDTO computerToDTO(Computer computer) {
 		Long idDTO = computer.getId();
 		String nameDTO = computer.getName();
 		String introducedDTO = null != computer.getIntroduced() ? computer.getIntroduced().format(dateFormat) : "";
@@ -53,7 +56,7 @@ public class ComputerMapper {
 		return computerDTO;
 	}
 
-	public static Computer dtoToComputer(ComputerDTO computerDTO, Company company) {
+	public Computer dtoToComputer(ComputerDTO computerDTO, Company company) {
 		String name = computerDTO.getName();
 		System.out.println(computerDTO.getDiscontinued());
 		LocalDate introduced = "" != computerDTO.getIntroduced() ? LocalDate.parse(computerDTO.getIntroduced()) : null;

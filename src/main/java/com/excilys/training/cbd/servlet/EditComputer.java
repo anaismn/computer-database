@@ -2,6 +2,7 @@ package com.excilys.training.cbd.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -33,20 +34,22 @@ public class EditComputer extends HttpServlet {
 	private ServiceComputer serviceComputer;
 	@Autowired
 	ServiceCompany serviceCompany;
+	@Autowired
+	ComputerMapper computerMapper;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 		super.init(config);
 	}
-	
+
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<Company> companies = new ArrayList<>();
+		List<Company> companies = new ArrayList<>();
 		try {
 			companies = serviceCompany.getAllCompanies();
 
 			Computer computer = serviceComputer.getOneComputer(request.getParameter(COMPUTER_TO_EDIT));
-			ComputerDTO computerDTO = ComputerMapper.computerToDTO(computer);
+			ComputerDTO computerDTO = computerMapper.computerToDTO(computer);
 			request.setAttribute(LIST_COMPANIES, companies);
 			request.setAttribute(COMPUTER_TO_EDIT, computerDTO);
 		} catch (DAOException e) {
@@ -77,7 +80,7 @@ public class EditComputer extends HttpServlet {
 
 			ComputerDTO computerDTO = new ComputerDTO(null, name, introduced, discontinued, company.getName());
 
-			Computer computer = ComputerMapper.dtoToComputer(computerDTO, company);
+			Computer computer = computerMapper.dtoToComputer(computerDTO, company);
 
 			try {
 				serviceComputer.setNewComputer(computer);

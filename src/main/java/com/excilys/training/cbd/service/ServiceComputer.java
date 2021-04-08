@@ -1,6 +1,7 @@
 package com.excilys.training.cbd.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -24,6 +25,10 @@ public class ServiceComputer {
 	ComputerDAO computerDao;
 	@Autowired
 	ServiceCompany serviceCompany;
+	@Autowired
+	CompanyMapper companyMapper;
+	@Autowired
+	ComputerMapper computerMapper;
 
 	public int countComputers(String nameSearched) throws DAOException {
 		return computerDao.countComputers(nameSearched);
@@ -33,10 +38,10 @@ public class ServiceComputer {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		ArrayList<Object> result = computerDao.getAllComputers(columnOrdering, limit, offset);
 		for (int i = 0; i < result.size(); i = i + 7) {
-			Company company = CompanyMapper.resultToCompany(result.subList(i + 5, i + 7));
+			Company company = companyMapper.resultToCompany(result.subList(i + 5, i + 7));
 			result.set(i + 4, company);
 
-			computers.add(ComputerMapper.resultToComputer(result.subList(i, i + 5)));
+			computers.add(computerMapper.resultToComputer(result.subList(i, i + 5)));
 		}
 		return computers;
 	}
@@ -47,7 +52,7 @@ public class ServiceComputer {
 
 	public Computer getOneComputer(String nameSearched) throws DAOException {
 		ArrayList<Object> result = computerDao.getOneComputer(nameSearched);
-		ArrayList<Company> companies = serviceCompany.getAllCompanies();
+		List<Company> companies = serviceCompany.getAllCompanies();
 		if (NO_COMPANY != result.get(4)) {
 			for (Company company : companies) {
 				if (company.getId() == result.get(4)) {
@@ -56,7 +61,7 @@ public class ServiceComputer {
 				}
 			}
 		}
-		Computer computer = ComputerMapper.resultToComputer(result);
+		Computer computer = computerMapper.resultToComputer(result);
 		return computer;
 	}
 
@@ -65,16 +70,16 @@ public class ServiceComputer {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		ArrayList<Object> result = computerDao.getComputersFiltered(nameSearched, columnOrdering, limit, offset);
 		for (int i = 0; i < result.size(); i = i + 7) {
-			Company company = CompanyMapper.resultToCompany(result.subList(i + 5, i + 7));
+			Company company = companyMapper.resultToCompany(result.subList(i + 5, i + 7));
 			result.set(i + 4, company);
 
-			computers.add(ComputerMapper.resultToComputer(result.subList(i, i + 5)));
+			computers.add(computerMapper.resultToComputer(result.subList(i, i + 5)));
 		}
 		return computers;
 	}
 
 	public void setNewComputer(Computer newComputer) throws DAOException {
-		ArrayList<Object> informations = ComputerMapper.computerToResult(newComputer);
+		ArrayList<Object> informations = computerMapper.computerToResult(newComputer);
 		computerDao.setNewComputer(informations);
 	}
 
@@ -87,7 +92,7 @@ public class ServiceComputer {
 	}
 
 	public void updateComputer(String oldName, Computer updatedComputer) throws DAOException {
-		ArrayList<Object> updatedInfo = ComputerMapper.computerToResult(updatedComputer);
+		ArrayList<Object> updatedInfo = computerMapper.computerToResult(updatedComputer);
 		computerDao.updateComputer(oldName, updatedInfo);
 	}
 
