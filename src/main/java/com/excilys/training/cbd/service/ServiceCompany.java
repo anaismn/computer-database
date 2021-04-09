@@ -1,7 +1,6 @@
 package com.excilys.training.cbd.service;
 
 import java.util.List;
-import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -24,12 +23,6 @@ public class ServiceCompany {
 
 	public List<Company> getAllCompanies() throws DAOException {
 		return companyDao.getAllCompanies();
-	}
-
-	public Company getOneCompany(String nameSearched) throws DAOException {
-		TreeMap<Long, String> result = companyDao.getOneCompany(nameSearched);
-		Company company = companyMapper.resultToCompany(nameSearched, result.firstKey());
-		return company;
 	}
 
 	public Company getOneCompany(Long idSearched) throws DAOException {

@@ -62,13 +62,14 @@ public class ComputerMapper implements RowMapper<Computer> {
 		return builder.build();
 	}
 
-	public ArrayList<Object> computerToResult(Computer computer) {
-		ArrayList<Object> informations = new ArrayList<Object>();
-		informations.add(computer.getId());
-		informations.add(computer.getName());
-		informations.add(null != computer.getIntroduced() ? Date.valueOf(computer.getIntroduced()) : null);
-		informations.add(null != computer.getDiscontinued() ? Date.valueOf(computer.getDiscontinued()) : null);
-		informations.add(computer.getCompany().getId());
+	public Object[] computerToResult(Computer computer) {
+		Object[] informations = new Object[] {
+			computer.getName(),
+			null != computer.getIntroduced() ? Date.valueOf(computer.getIntroduced()) : null,
+			null != computer.getDiscontinued() ? Date.valueOf(computer.getDiscontinued()) : null,
+			computer.getCompany().getId(),
+		};
+		System.out.println(informations.toString());
 		return informations;
 	}
 

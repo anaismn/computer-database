@@ -83,7 +83,7 @@ public class EditComputer extends HttpServlet {
 			Computer computer = computerMapper.dtoToComputer(computerDTO, company);
 
 			try {
-				serviceComputer.setNewComputer(computer);
+				serviceComputer.updateComputer(computer, Long.parseLong(request.getParameter("computerId")));
 			} catch (DAOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

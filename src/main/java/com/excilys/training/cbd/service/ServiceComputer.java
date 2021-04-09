@@ -1,11 +1,12 @@
 package com.excilys.training.cbd.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import com.excilys.training.cbd.mapper.CompanyMapper;
@@ -41,14 +42,12 @@ public class ServiceComputer {
 		return computerDao.getOneComputer(idSearched);
 	}
 
-
 	public List<Computer> getComputersFiltered(String nameSearched, String columnOrdering, int limit, int offset) {
 		return computerDao.getComputersFiltered(nameSearched, columnOrdering, limit, offset);
 	}
 
-
 	public void setNewComputer(Computer newComputer) throws DAOException {
-		ArrayList<Object> informations = computerMapper.computerToResult(newComputer);
+		Object[] informations = computerMapper.computerToResult(newComputer);
 		computerDao.setNewComputer(informations);
 	}
 
@@ -56,13 +55,8 @@ public class ServiceComputer {
 		computerDao.deleteComputer(id);
 	}
 
-	public void deleteComputer(String name) throws DAOException {
-		computerDao.deleteComputer(name);
-	}
-
-	public void updateComputer(String oldName, Computer updatedComputer) throws DAOException {
-		ArrayList<Object> updatedInfo = computerMapper.computerToResult(updatedComputer);
-		computerDao.updateComputer(oldName, updatedInfo);
+	public void updateComputer(Computer updatedComputer, Long id) throws DAOException {
+		computerDao.updateComputer(updatedComputer, id);
 	}
 
 }
