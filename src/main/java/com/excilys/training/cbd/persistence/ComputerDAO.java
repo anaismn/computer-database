@@ -3,25 +3,27 @@ package com.excilys.training.cbd.persistence;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import com.excilys.training.cbd.mapper.ComputerMapper;
+import com.excilys.training.cbd.model.Computer;
 
 @Repository
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class ComputerDAO {
 	private static final String COUNT_COMPUTERS = "SELECT COUNT(*) FROM computer WHERE computer.name LIKE ? ";
 	private static final String SELCT_ALL_COMPUTERS = "SELECT * FROM computer LEFT JOIN company ON company.id = company_id ORDER BY computer.";
-	private static final String SELCT_ONE_COMPUTER = "SELECT * FROM computer WHERE name = ? ";
+	private static final String SELCT_ONE_COMPUTER = "SELECT * FROM computer WHERE id = ? ";
 	private static final String FILTER_COMPUTERS = "SELECT * FROM computer LEFT JOIN company ON company.id = company_id WHERE computer.name LIKE ? ORDER BY computer.";
 	private static final String CREATE_COMPUTER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE id = ? ";
@@ -29,93 +31,34 @@ public class ComputerDAO {
 
 	@Autowired
 	private DataSource dataSource;
+	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
-	public int countComputers(String nameSearched) throws DAOException {
-		try (Connection connexion = dataSource.getConnection();
-				PreparedStatement preStatement = connexion.prepareStatement(COUNT_COMPUTERS);) {
-
-			preStatement.setString(1, "%" + nameSearched + "%");
-			ResultSet resultat = preStatement.executeQuery();
-			int count = 0;
-			while (resultat.next()) {
-				count = resultat.getInt(1);
-			}
-			return count;
-		} catch (SQLException e) {
-			throw new DAOException(e);
-			// logger.error(e.getMessage());
-		}
+	ComputerDAO(DataSource dataSource) {
+		jdbcTemplate.setDataSource(dataSource);
 	}
 
-	public ArrayList<Object> getAllComputers(String columnOrdering, int limit, int offset) throws DAOException {
-		try (Connection connexion = dataSource.getConnection(); Statement preStatement = connexion.createStatement();) {
-
-			ResultSet resultat = preStatement
-					.executeQuery(SELCT_ALL_COMPUTERS + columnOrdering + " LIMIT " + limit + " OFFSET " + offset + ";");
-			return mapperResult(resultat);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			// logger.error(e.getMessage());
-		}
-		return null;
+	
+	public List<Computer> getAllComputers(String columnOrdering, int limit, int offset) {
+		return jdbcTemplate.query(SELCT_ALL_COMPUTERS + columnOrdering + " LIMIT " + limit + " OFFSET " + offset + ";",
+				new ComputerMapper());
 	}
 
-	public ArrayList<Object> getOneComputer(Long id) throws DAOException {
-		try (Connection connexion = dataSource.getConnection();
-				PreparedStatement preStatement = connexion.prepareStatement(SELCT_ONE_COMPUTER);) {
-
-			Long searchID = id;
-			preStatement.setLong(1, searchID);
-
-			ResultSet resultat = preStatement.executeQuery();
-			return mapperResult(resultat);
-		} catch (SQLException e) {
-			throw new DAOException(e);
-		}
+	public int countComputers(String nameSearched) {
+		return jdbcTemplate.queryForObject(COUNT_COMPUTERS + ";",
+				Integer.class, "%" + nameSearched + "%");
+	}
+	
+	public Computer getOneComputer(Long id) {
+		return (Computer) jdbcTemplate.queryForObject(SELCT_ONE_COMPUTER + ";",
+				new ComputerMapper(), id);
 	}
 
-	public ArrayList<Object> getOneComputer(String nameSearched) throws DAOException {
-		try (Connection connexion = dataSource.getConnection();
-				PreparedStatement preStatement = connexion.prepareStatement(SELCT_ONE_COMPUTER);) {
-
-			preStatement.setString(1, nameSearched);
-			ResultSet resultat = preStatement.executeQuery();
-			ArrayList<Object> result = new ArrayList<>();
-			while (resultat.next()) {
-				result.add(resultat.getLong("id"));
-				result.add(resultat.getString("name"));
-				LocalDate introduced = null != resultat.getDate("introduced")
-						? resultat.getDate("introduced").toLocalDate()
-						: null;
-				result.add(introduced);
-				LocalDate discontinued = null != resultat.getDate("discontinued")
-						? resultat.getDate("discontinued").toLocalDate()
-						: null;
-				result.add(discontinued);
-				result.add(resultat.getLong("company_id"));
-			}
-			return result;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DAOException(e);
-		}
+	public List<Computer> getComputersFiltered(String nameSearched, String columnOrdering, int limit, int offset) {
+		return jdbcTemplate.query(FILTER_COMPUTERS + columnOrdering + " LIMIT " + limit + " OFFSET " + offset + ";",
+				new ComputerMapper(), "%" + nameSearched + "%");
 	}
 
-	public ArrayList<Object> getComputersFiltered(String nameSearched, String columnOrdering, int limit, int offset)
-			throws DAOException {
-		try (Connection connexion = dataSource.getConnection();
-				PreparedStatement preStatement = connexion.prepareStatement(
-						FILTER_COMPUTERS + columnOrdering + " LIMIT " + limit + " OFFSET " + offset);) {
-			preStatement.setString(1, "%" + nameSearched + "%");
-
-			ResultSet resultat = preStatement.executeQuery();
-			return mapperResult(resultat);
-
-		} catch (SQLException e) {
-			throw new DAOException(e);
-		}
-	}
-
+	
 	public void setNewComputer(ArrayList<Object> informations) throws DAOException {
 		int resultat = 0;
 		try (Connection connexion = dataSource.getConnection();
@@ -187,29 +130,4 @@ public class ComputerDAO {
 			throw new DAOException(e);
 		}
 	}
-
-	public ArrayList<Object> mapperResult(ResultSet resultat) throws DAOException {
-		ArrayList<Object> result = new ArrayList<>();
-		try {
-			while (resultat.next()) {
-				result.add(resultat.getLong("computer.id"));
-				result.add(resultat.getString("name"));
-				LocalDate introduced = null != resultat.getDate("introduced")
-						? resultat.getDate("introduced").toLocalDate()
-						: null;
-				result.add(introduced);
-				LocalDate discontinued = null != resultat.getDate("discontinued")
-						? resultat.getDate("discontinued").toLocalDate()
-						: null;
-				result.add(discontinued);
-				result.add(resultat.getLong("company_id"));
-				result.add(resultat.getLong("company.id"));
-				result.add(resultat.getString("company.name"));
-			}
-			return result;
-		} catch (SQLException e) {
-			throw new DAOException(e);
-		}
-	}
-
 }

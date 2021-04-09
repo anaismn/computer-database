@@ -1,11 +1,15 @@
 package com.excilys.training.cbd.mapper;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.excilys.training.cbd.model.Company;
@@ -13,9 +17,32 @@ import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.model.ComputerDTO;
 
 @Component
-public class ComputerMapper {
+public class ComputerMapper implements RowMapper<Computer> {
 
 	static DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	@Autowired
+	CompanyMapper companyMapper;
+
+	@Override
+	public Computer mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+		Long id = resultSet.getLong("id");
+		String name = resultSet.getString("name");
+
+		LocalDate introduced = null != resultSet.getDate("introduced") ? resultSet.getDate("introduced").toLocalDate()
+				: null;
+		LocalDate discontinued = null != resultSet.getDate("discontinued")
+				? resultSet.getDate("discontinued").toLocalDate()
+				: null;
+
+		Computer.Builder builder = new Computer.Builder(name).setId(id);
+		builder = builder.setIntroduced(introduced).setDiscontinued(discontinued);
+		
+		if (null != resultSet.getString("company.name")) {
+			Company company = new Company.Builder(resultSet.getString("company.name")).setId(resultSet.getLong("company.id")).build();
+			builder = builder.setCompany(company);
+		}
+		return builder.build();
+	}
 
 	public Computer resultToComputer(List<Object> list) {
 		Long id = (Long) list.get(0);

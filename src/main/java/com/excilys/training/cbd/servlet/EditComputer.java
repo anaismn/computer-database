@@ -48,7 +48,7 @@ public class EditComputer extends HttpServlet {
 		try {
 			companies = serviceCompany.getAllCompanies();
 
-			Computer computer = serviceComputer.getOneComputer(request.getParameter(COMPUTER_TO_EDIT));
+			Computer computer = serviceComputer.getOneComputer(Long.parseLong(request.getParameter(COMPUTER_TO_EDIT)));
 			ComputerDTO computerDTO = computerMapper.computerToDTO(computer);
 			request.setAttribute(LIST_COMPANIES, companies);
 			request.setAttribute(COMPUTER_TO_EDIT, computerDTO);

@@ -31,7 +31,6 @@ public class SpringWebConfig  implements WebApplicationInitializer {
 		return new HikariDataSource(hikariConf);
 	}
 	
-	 @Bean
     public JdbcTemplate getJdbcTemplate(HikariDataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.excilys.training.cbd.mapper.CompanyMapper;
 import com.excilys.training.cbd.mapper.ComputerMapper;
-import com.excilys.training.cbd.model.Company;
 import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.persistence.ComputerDAO;
 import com.excilys.training.cbd.persistence.DAOException;
@@ -34,49 +33,19 @@ public class ServiceComputer {
 		return computerDao.countComputers(nameSearched);
 	}
 
-	public ArrayList<Computer> getAllComputers(String columnOrdering, int limit, int offset) throws DAOException {
-		ArrayList<Computer> computers = new ArrayList<Computer>();
-		ArrayList<Object> result = computerDao.getAllComputers(columnOrdering, limit, offset);
-		for (int i = 0; i < result.size(); i = i + 7) {
-			Company company = companyMapper.resultToCompany(result.subList(i + 5, i + 7));
-			result.set(i + 4, company);
-
-			computers.add(computerMapper.resultToComputer(result.subList(i, i + 5)));
-		}
-		return computers;
+	public List<Computer> getAllComputers(String columnOrdering, int limit, int offset) throws DAOException {
+		return computerDao.getAllComputers(columnOrdering, limit, offset);
 	}
 
-	public void getOneComputer(Long idSearched) throws DAOException {
-		computerDao.getOneComputer(idSearched);
+	public Computer getOneComputer(Long idSearched) throws DAOException {
+		return computerDao.getOneComputer(idSearched);
 	}
 
-	public Computer getOneComputer(String nameSearched) throws DAOException {
-		ArrayList<Object> result = computerDao.getOneComputer(nameSearched);
-		List<Company> companies = serviceCompany.getAllCompanies();
-		if (NO_COMPANY != result.get(4)) {
-			for (Company company : companies) {
-				if (company.getId() == result.get(4)) {
-					result.set(4, company);
-					break;
-				}
-			}
-		}
-		Computer computer = computerMapper.resultToComputer(result);
-		return computer;
+
+	public List<Computer> getComputersFiltered(String nameSearched, String columnOrdering, int limit, int offset) {
+		return computerDao.getComputersFiltered(nameSearched, columnOrdering, limit, offset);
 	}
 
-	public ArrayList<Computer> getComputersFiltered(String nameSearched, String columnOrdering, int limit, int offset)
-			throws DAOException {
-		ArrayList<Computer> computers = new ArrayList<Computer>();
-		ArrayList<Object> result = computerDao.getComputersFiltered(nameSearched, columnOrdering, limit, offset);
-		for (int i = 0; i < result.size(); i = i + 7) {
-			Company company = companyMapper.resultToCompany(result.subList(i + 5, i + 7));
-			result.set(i + 4, company);
-
-			computers.add(computerMapper.resultToComputer(result.subList(i, i + 5)));
-		}
-		return computers;
-	}
 
 	public void setNewComputer(Computer newComputer) throws DAOException {
 		ArrayList<Object> informations = computerMapper.computerToResult(newComputer);

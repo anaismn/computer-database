@@ -33,9 +33,7 @@ public class ServiceCompany {
 	}
 
 	public Company getOneCompany(Long idSearched) throws DAOException {
-		TreeMap<Long, String> result = companyDao.getOneCompany(idSearched);
-		Company company = companyMapper.resultToCompany(result.get(idSearched), idSearched);
-		return company;
+		return companyDao.getOneCompany(idSearched);
 	}
 
 	public void deleteCompany(Long idSearched) throws DAOException {

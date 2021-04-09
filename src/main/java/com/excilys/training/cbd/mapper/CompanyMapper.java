@@ -13,6 +13,7 @@ import com.excilys.training.cbd.model.Company;
 public class CompanyMapper implements RowMapper<Company> {
 
 	public Company resultToCompany(String name, Long id) {
+		System.out.println("map map ------> "+ name);
 		return new Company.Builder(name).setId(id).build();
 	}
 
@@ -22,7 +23,7 @@ public class CompanyMapper implements RowMapper<Company> {
 
 	@Override
 	public Company mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-		return new Company.Builder(resultSet.getString("name")).setId(resultSet.getLong("id")).build();
+		return new Company.Builder(resultSet.getString("company.name")).setId(resultSet.getLong("company.id")).build();
 	}
 
 }

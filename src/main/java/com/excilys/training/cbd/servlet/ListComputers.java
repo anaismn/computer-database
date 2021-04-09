@@ -2,6 +2,7 @@ package com.excilys.training.cbd.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -47,7 +48,8 @@ public class ListComputers extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 
-		String nameSearched = null != session.getAttribute(NAME_SEARCHED) ? (String) session.getAttribute(NAME_SEARCHED)
+		String nameSearched = null != session.getAttribute(NAME_SEARCHED) 
+				? (String) session.getAttribute(NAME_SEARCHED)
 				: "";
 		if (null != request.getParameter("search")) {
 			nameSearched = request.getParameter("search");
@@ -67,7 +69,8 @@ public class ListComputers extends HttpServlet {
 		int pageNumber = null != request.getParameter(PARAMS_PAGE_NUMBER)
 				? Integer.parseInt((String) request.getParameter(PARAMS_PAGE_NUMBER))
 				: 1;
-		ArrayList<Computer> computers = retrieveComputers(nameSearched, orderBy, limitByPages, pageNumber);
+		
+		List<Computer> computers = retrieveComputers(nameSearched, orderBy, limitByPages, pageNumber);
 		int count = 0;
 		try {
 			count = serviceComputer.countComputers(nameSearched);
@@ -104,24 +107,18 @@ public class ListComputers extends HttpServlet {
 		doGet(request, response);
 	}
 
-	private ArrayList<Computer> retrieveComputers(String nameSearched, String orderBy, int limitByPages,
-			int pageNumber) {
+	private List<Computer> retrieveComputers(String nameSearched, String orderBy, int limitByPages, int pageNumber) {
 		int offset = (pageNumber - 1) * limitByPages;
-		ArrayList<Computer> computers = new ArrayList<>();
-		try {
-			if (null != nameSearched) {
-				computers = serviceComputer.getComputersFiltered(nameSearched, orderBy, limitByPages, offset);
-			} else {
-				computers = serviceComputer.getAllComputers(orderBy, limitByPages, offset);
-			}
-
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
+		List<Computer> computers = new ArrayList<>();
+		//if ("" != nameSearched) {
+			computers = serviceComputer.getComputersFiltered(nameSearched, orderBy, limitByPages, offset);
+	/*	} else {
+			computers = serviceComputer.getAllComputers(orderBy, limitByPages, offset);
+		}  */
 		return computers;
 	}
 
-	private void displayComputers(HttpServletRequest request, HttpSession session, ArrayList<Computer> computers,
+	private void displayComputers(HttpServletRequest request, HttpSession session, List<Computer> computers,
 			int limitByPages, int pageNumber, int count, String nameSearched) throws DAOException {
 		ArrayList<ComputerDTO> computersDTO = new ArrayList<ComputerDTO>();
 
@@ -131,7 +128,7 @@ public class ListComputers extends HttpServlet {
 		session.setAttribute(NUMBER_OF_COMPUTERS, count);
 		session.setAttribute(NUMBER_OF_PAGES, (count - 1) / limitByPages + 1);
 		session.setAttribute(PAGE_NUMBER, pageNumber);
-		session.setAttribute(LIST_COMPUTERS, computersDTO);
+		request.setAttribute(LIST_COMPUTERS, computersDTO);
 		session.setAttribute(NAME_SEARCHED, nameSearched);
 	}
 
