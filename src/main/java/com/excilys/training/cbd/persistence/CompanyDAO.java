@@ -23,7 +23,7 @@ public class CompanyDAO {
 	private static final String DELETE_COMPUTERS = "DELETE FROM computer WHERE company_id = ? ;";
 	private static final String DELETE_COMPANY = "DELETE FROM company WHERE id = ? ;";
 
-	@Autowired
+//	@Autowired
 //	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 

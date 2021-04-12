@@ -24,7 +24,7 @@ public class ComputerDAO {
 	private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE id = ? ";
 	private static final String UPDATE_COMPUTER = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ? ";
 
-	@Autowired
+//	@Autowired
 //	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
