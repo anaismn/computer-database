@@ -23,7 +23,7 @@ import com.excilys.training.cbd.persistence.DAOException;
 import com.excilys.training.cbd.service.ServiceComputer;
 
 @Component
-@WebServlet("/listComputers")
+//@WebServlet("/listComputers")
 public class ListComputers extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String LIST_COMPUTERS = "listComputers";
@@ -36,14 +36,14 @@ public class ListComputers extends HttpServlet {
 
 	@Autowired
 	private ServiceComputer serviceComputer;
-	@Autowired
+	@Autowired 
 	ComputerMapper computerMapper;
 
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-		super.init(config);
-	}
+//	@Override
+//	public void init(ServletConfig config) throws ServletException {
+//		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+//		super.init(config);
+//	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();

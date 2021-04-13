@@ -67,7 +67,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 			computer.getName(),
 			null != computer.getIntroduced() ? Date.valueOf(computer.getIntroduced()) : null,
 			null != computer.getDiscontinued() ? Date.valueOf(computer.getDiscontinued()) : null,
-			computer.getCompany().getId(),
+			null != computer.getCompany() ? computer.getCompany().getId() : null,
 		};
 		System.out.println(informations.toString());
 		return informations;

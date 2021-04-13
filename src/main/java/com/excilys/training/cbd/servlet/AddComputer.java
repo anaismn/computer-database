@@ -23,8 +23,8 @@ import com.excilys.training.cbd.persistence.DAOException;
 import com.excilys.training.cbd.service.ServiceCompany;
 import com.excilys.training.cbd.service.ServiceComputer;
 
-@Component
-@WebServlet("/addComputer")
+//@Component
+//@WebServlet("/addComputer")
 public class AddComputer extends HttpServlet {
 
 	public static final String LIST_COMPANIES = "listCompanies";
@@ -33,7 +33,7 @@ public class AddComputer extends HttpServlet {
 	private ServiceComputer serviceComputer;
 	@Autowired
 	ServiceCompany serviceCompany;
-	@Autowired
+	@Autowired 
 	ComputerMapper computerMapper;
 
 	@Override

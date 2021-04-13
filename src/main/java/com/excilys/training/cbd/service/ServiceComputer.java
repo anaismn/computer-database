@@ -25,9 +25,7 @@ public class ServiceComputer {
 	ComputerDAO computerDao;
 	@Autowired
 	ServiceCompany serviceCompany;
-	@Autowired
-	CompanyMapper companyMapper;
-	@Autowired
+	@Autowired 
 	ComputerMapper computerMapper;
 
 	public int countComputers(String nameSearched) throws DAOException {

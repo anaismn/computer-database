@@ -18,8 +18,6 @@ public class ServiceCompany {
 
 	@Autowired
 	CompanyDAO companyDao;
-	@Autowired
-	CompanyMapper companyMapper;
 
 	public List<Company> getAllCompanies() throws DAOException {
 		return companyDao.getAllCompanies();
