@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <%@ page isELIgnored="false"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html>
 <html>
@@ -12,9 +12,9 @@
 <meta charset="utf-8">
 <!-- Bootstrap -->
 
-<link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -38,7 +38,7 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer"  href="addComputer">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer"  href="/cbd-maven/addComputer">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -85,14 +85,14 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                 <c:forEach items="${ listComputers }" var="computer" varStatus="status">
+                 <c:forEach items="${ computers }" var="computer" varStatus="status">
 				    
 				      <tr>
                         <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="<c:out value="${ computer.id }"/>" >
                         </td>
                         <td>
-                            <a href="/cbd-maven/editComputer?computer=<c:out value="${ computer.name }"/>" onclick=""><c:out value="${ computer.name }" /></a>
+                            <a href="/cbd-maven/editComputer?computer=<c:out value="${ computer.id }"/>" onclick=""><c:out value="${ computer.name }"/></a>
                         </td>
                          <td><c:out value="${ computer.introduced }" /></td>
                         <td> <c:out value="${ computer.discontinued }" /> </td>
@@ -136,11 +136,11 @@
 	            <button type="submit" class="btn btn-default" name="limitByPages" value="100">100</button>
             </form>
         </div>
-
+	</div>
     </footer>
-<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
 
 </body>
 </html>
