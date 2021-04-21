@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import com.excilys.training.cbd.model.Company;
 import com.excilys.training.cbd.model.Computer;
 import com.excilys.training.cbd.model.ComputerDTO;
+import com.excilys.training.cbd.model.ComputerTable;
 
 @Component
 public class ComputerMapper implements RowMapper<Computer> {
@@ -36,9 +37,10 @@ public class ComputerMapper implements RowMapper<Computer> {
 
 		Computer.Builder builder = new Computer.Builder(name).setId(id);
 		builder = builder.setIntroduced(introduced).setDiscontinued(discontinued);
-		
+
 		if (null != resultSet.getString("company.name")) {
-			Company company = new Company.Builder(resultSet.getString("company.name")).setId(resultSet.getLong("company.id")).build();
+			Company company = new Company.Builder(resultSet.getString("company.name"))
+					.setId(resultSet.getLong("company.id")).build();
 			builder = builder.setCompany(company);
 		}
 		return builder.build();
@@ -63,12 +65,10 @@ public class ComputerMapper implements RowMapper<Computer> {
 	}
 
 	public Object[] computerToResult(Computer computer) {
-		Object[] informations = new Object[] {
-			computer.getName(),
-			null != computer.getIntroduced() ? Date.valueOf(computer.getIntroduced()) : null,
-			null != computer.getDiscontinued() ? Date.valueOf(computer.getDiscontinued()) : null,
-			null != computer.getCompany() ? computer.getCompany().getId() : null,
-		};
+		Object[] informations = new Object[] { computer.getName(),
+				null != computer.getIntroduced() ? Date.valueOf(computer.getIntroduced()) : null,
+				null != computer.getDiscontinued() ? Date.valueOf(computer.getDiscontinued()) : null,
+				null != computer.getCompany() ? computer.getCompany().getId() : null, };
 		System.out.println(informations.toString());
 		return informations;
 	}
@@ -93,6 +93,26 @@ public class ComputerMapper implements RowMapper<Computer> {
 		Computer computer = new Computer.Builder(name).setIntroduced(introduced).setDiscontinued(discontinued)
 				.setCompany(company).build();
 		return computer;
+	}
+
+	public ComputerDTO tableToDTO(ComputerTable computerTable) {
+		Long idDTO = computerTable.getId();
+		String nameDTO = computerTable.getName();
+		String introducedDTO = null != computerTable.getIntroduced() ? computerTable.getIntroduced().toString() : "";
+		String discontinuedDTO = null != computerTable.getDiscontinued() ? computerTable.getDiscontinued().toString()
+				: "";
+		String companyDTO = null != computerTable.getCompanyId() ? computerTable.getCompany().getName() : "";
+		return new ComputerDTO(idDTO, nameDTO, introducedDTO, discontinuedDTO, companyDTO);
+	}
+
+	public ComputerTable computerToTable(Computer computer) {
+		ComputerTable computerTable = new ComputerTable();
+		computerTable.setId(computer.getId());
+		computerTable.setName(computer.getName());
+		computerTable.setIntroduced(computer.getIntroduced());
+		computerTable.setDiscontinued(computer.getDiscontinued());
+		computerTable.setCompanyId((null != computer.getCompany() ? computer.getCompany().getId() : null));
+		return computerTable;
 	}
 
 }

@@ -8,12 +8,12 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.excilys.training.cbd.model.Company;
+import com.excilys.training.cbd.model.CompanyTable;
 
 @Component
 public class CompanyMapper implements RowMapper<Company> {
 
 	public Company resultToCompany(String name, Long id) {
-		System.out.println("map map ------> "+ name);
 		return new Company.Builder(name).setId(id).build();
 	}
 
@@ -26,4 +26,8 @@ public class CompanyMapper implements RowMapper<Company> {
 		return new Company.Builder(resultSet.getString("company.name")).setId(resultSet.getLong("company.id")).build();
 	}
 
+	public Company tableToCompany(CompanyTable companyTable) {
+		return new Company.Builder(companyTable.getName()).setId(companyTable.getId()).build();
+	}
+	
 }

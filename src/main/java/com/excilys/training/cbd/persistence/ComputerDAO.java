@@ -1,69 +1,110 @@
 package com.excilys.training.cbd.persistence;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.training.cbd.mapper.ComputerMapper;
-import com.excilys.training.cbd.model.Computer;
+import com.excilys.training.cbd.model.ComputerTable;
+import com.excilys.training.cbd.model.QComputerTable;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class ComputerDAO {
-	private static final String COUNT_COMPUTERS = "SELECT COUNT(*) FROM computer WHERE computer.name LIKE ? ";
-	private static final String SELCT_ALL_COMPUTERS = "SELECT * FROM computer LEFT JOIN company ON company.id = company_id ORDER BY computer.";
-	private static final String SELCT_ONE_COMPUTER = "SELECT * FROM computer LEFT JOIN company ON company.id = company_id WHERE computer.id = ? ";
-	private static final String FILTER_COMPUTERS = "SELECT * FROM computer LEFT JOIN company ON company.id = company_id WHERE computer.name LIKE ? ORDER BY computer.";
-	private static final String CREATE_COMPUTER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?);";
-	private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE id = ? ";
-	private static final String UPDATE_COMPUTER = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ? ";
 
-//	@Autowired
-//	private DataSource dataSource;
-	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
+	private EntityManager entityManager;
 
-	ComputerDAO(DataSource dataSource) {
-		jdbcTemplate.setDataSource(dataSource);
+	ComputerDAO(DataSource dataSource, SessionFactory sessionFactory) {
+		this.entityManager = sessionFactory.createEntityManager();
 	}
 
-	public List<Computer> getAllComputers(String columnOrdering, int limit, int offset) {
-		return jdbcTemplate.query(SELCT_ALL_COMPUTERS + columnOrdering + " LIMIT " + limit + " OFFSET " + offset + ";",
-				new ComputerMapper());
+	public List<ComputerTable> getAllComputers(String columnOrdering, int limit, int offset) {
+		JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+		QComputerTable computerTable = QComputerTable.computerTable;
+
+		List<ComputerTable> computersTable = queryFactory.selectFrom(computerTable).orderBy(computerTable.id.asc())
+				.fetch();
+
+		return computersTable;
 	}
 
-	public int countComputers(String nameSearched) {
-		return jdbcTemplate.queryForObject(COUNT_COMPUTERS + ";", Integer.class, "%" + nameSearched + "%");
+	public long countComputers(String nameSearched) {
+		JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+		QComputerTable computerTable = QComputerTable.computerTable;
+
+		long numberOfComputers = queryFactory.selectFrom(computerTable).where(computerTable.name.contains(nameSearched))
+				.fetchCount();
+
+		return numberOfComputers;
 	}
 
-	public Computer getOneComputer(Long id) {
-		return (Computer) jdbcTemplate.queryForObject(SELCT_ONE_COMPUTER, new ComputerMapper(), id);
+	public ComputerTable getOneComputer(Long id) {
+		JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+		QComputerTable computerTable = QComputerTable.computerTable;
+
+		ComputerTable computer = queryFactory.selectFrom(computerTable).where(computerTable.id.eq(id)).fetchOne();
+
+		return computer;
 	}
 
-	public List<Computer> getComputersFiltered(String nameSearched, String columnOrdering, int limit, int offset) {
-		return jdbcTemplate.query(FILTER_COMPUTERS + columnOrdering + " LIMIT " + limit + " OFFSET " + offset + ";",
-				new ComputerMapper(), "%" + nameSearched + "%");
+	public List<ComputerTable> getComputersFiltered(String nameSearched, String columnOrdering, int limit, int offset) {
+		JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+		QComputerTable computerTable = QComputerTable.computerTable;
+
+		List<ComputerTable> computersTable = queryFactory.selectFrom(computerTable)
+				.where(computerTable.name.contains(nameSearched)).limit(limit).offset(offset).fetch();
+
+		return computersTable;
 	}
 
-	public void setNewComputer(Object[] informations) {
-		jdbcTemplate.update(CREATE_COMPUTER, informations);
+	public void setNewComputer(ComputerTable computerTable) {
+		if (!entityManager.getTransaction().isActive()) {
+			entityManager.getTransaction().begin();
+		}
+		entityManager.persist(computerTable);
+		entityManager.getTransaction().commit();
+		entityManager.clear();
 	}
 
 	public void deleteComputer(Long id) {
-		jdbcTemplate.update(DELETE_COMPUTER, id);
+		JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+
+		if (!entityManager.getTransaction().isActive()) {
+			entityManager.getTransaction().begin();
+		}
+		QComputerTable computerTable = QComputerTable.computerTable;
+
+		queryFactory.delete(computerTable).where(computerTable.id.eq(id)).execute();
+		entityManager.getTransaction().commit();
+		entityManager.clear();
 	}
 
-	public void updateComputer(Computer updatedComputer, Long id) {
-		jdbcTemplate.update(UPDATE_COMPUTER, 
-				updatedComputer.getName(), 
-				updatedComputer.getIntroduced(), 
-				updatedComputer.getDiscontinued(), 
-				updatedComputer.getCompany().getId(), 
-				id);
+	@Transactional(rollbackFor = { SQLException.class })
+	public void updateComputer(ComputerTable updatedComputer, Long id) {
+		JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+
+		if (!entityManager.getTransaction().isActive()) {
+			entityManager.getTransaction().begin();
+		}
+		QComputerTable computerTable = QComputerTable.computerTable;
+
+		queryFactory.update(computerTable).where(computerTable.id.eq(id))
+				.set(computerTable.name, updatedComputer.getName())
+				.set(computerTable.introduced, updatedComputer.getIntroduced())
+				.set(computerTable.discontinued, updatedComputer.getDiscontinued())
+				.set(computerTable.companyId, updatedComputer.getCompanyId()).execute();
+		entityManager.getTransaction().commit();
+		entityManager.clear();
 	}
 }

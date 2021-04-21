@@ -24,7 +24,7 @@ public class Pagination {
 			} else {
 				pages.add(new Page(j, computersDTO.subList(i, i + limitByPage)));
 			}
-		}w
+		}
 
 	}
 

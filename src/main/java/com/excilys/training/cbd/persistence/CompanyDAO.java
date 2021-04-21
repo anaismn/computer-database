@@ -1,49 +1,73 @@
 package com.excilys.training.cbd.persistence;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.training.cbd.mapper.CompanyMapper;
 import com.excilys.training.cbd.model.Company;
+import com.excilys.training.cbd.model.CompanyTable;
+import com.excilys.training.cbd.model.QCompanyTable;
+import com.excilys.training.cbd.model.QComputerTable;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class CompanyDAO {
-	private static final String SELECT_ALL_COMPANIES = "SELECT * FROM company;";
-	private static final String SELECT_ONE_COMPANY_BY_NAME = "SELECT * FROM company WHERE name = ? ;";
-	private static final String SELECT_ONE_COMPANY_BY_ID = "SELECT * FROM company WHERE id = ? ";
-	private static final String DELETE_COMPUTERS = "DELETE FROM computer WHERE company_id = ? ;";
-	private static final String DELETE_COMPANY = "DELETE FROM company WHERE id = ? ;";
 
-//	@Autowired
-//	private DataSource dataSource;
-	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
+	private EntityManager entityManager;
 
-	CompanyDAO(DataSource dataSource) {
-		jdbcTemplate.setDataSource(dataSource);
+	CompanyDAO(DataSource dataSource, SessionFactory sessionFactory) {
+		this.entityManager = sessionFactory.createEntityManager();
 	}
 
-	public List<Company> getAllCompanies() {
-		return jdbcTemplate.query(SELECT_ALL_COMPANIES, new CompanyMapper());
+	public List<CompanyTable> getAllCompanies() {
+		JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+		QCompanyTable companyTable = QCompanyTable.companyTable;
+
+		List<CompanyTable> companysTable = queryFactory.selectFrom(companyTable)
+				.orderBy(companyTable.id.asc())
+				.fetch();
+		return companysTable;
 	}
 
-	public Company getOneCompany(Long idSearched) {
-		return jdbcTemplate.queryForObject(
-				SELECT_ONE_COMPANY_BY_ID, new CompanyMapper(), idSearched);
+	public CompanyTable getOneCompany(Long idSearched) {
+		JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+		QCompanyTable companyTable = QCompanyTable.companyTable;
+
+		CompanyTable result = queryFactory.selectFrom(companyTable)
+				.where(companyTable.id.eq(idSearched))
+				.fetchOne();
+		return result;
 	}
 
-	@Transactional
-	public void deleteCompany(Long idSearched) {
-		jdbcTemplate.update(DELETE_COMPUTERS, idSearched);
-		jdbcTemplate.update(DELETE_COMPANY, idSearched);
+	@Transactional(rollbackFor = { SQLException.class })
+	public void deleteCompany(Long id) {
+		JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+
+		if (!entityManager.getTransaction().isActive()) {
+			entityManager.getTransaction().begin();
+		}
+		
+		QComputerTable computerTable = QComputerTable.computerTable;
+		queryFactory.delete(computerTable)
+		.where(computerTable.companyId.eq(id))
+		.execute();
+		
+		QCompanyTable companyTable = QCompanyTable.companyTable;
+		queryFactory.delete(companyTable)
+		.where(companyTable.id.eq(id))
+		.execute();
+		entityManager.getTransaction().commit();
+		entityManager.clear();
 	}
 
 }

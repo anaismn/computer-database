@@ -48,7 +48,7 @@ public class ListComputersController {
 		}
 
 		int offset = (pageNumber - 1) * listComputersParams.getLimitByPages();
-		int count = 0;
+		long count = 0;
 		try {
 			count = serviceComputer.countComputers(listComputersParams.getNameSearched());
 		} catch (DAOException e) {
@@ -56,11 +56,16 @@ public class ListComputersController {
 			e.printStackTrace();
 		}
 
-		List<Computer> computers = serviceComputer.getComputersFiltered(listComputersParams.getNameSearched(), orderBy,
-				listComputersParams.getLimitByPages(), offset);
-		ArrayList<ComputerDTO> computersDTO = new ArrayList<ComputerDTO>();
-		computers.forEach((computer) -> computersDTO.add(computerMapper.computerToDTO(computer)));
+//		List<Computer> computers = serviceComputer.getComputersFiltered(listComputersParams.getNameSearched(), orderBy,
+//				listComputersParams.getLimitByPages(), offset);
+//		ArrayList<ComputerDTO> computersDTO = new ArrayList<ComputerDTO>();
+//		computers.forEach((computer) -> computersDTO.add(computerMapper.computerToDTO(computer)));
 
+		
+		List<ComputerDTO> computersDTO = null;
+		computersDTO = serviceComputer.getComputersFiltered(listComputersParams.getNameSearched(), orderBy,
+				listComputersParams.getLimitByPages(), offset);
+		
 		modelAndView.addObject("computers", computersDTO);
 		modelAndView.addObject("nameSearched", listComputersParams.getNameSearched());
 		modelAndView.addObject("pageNumber", pageNumber);
@@ -136,17 +141,16 @@ public class ListComputersController {
 	public ModelAndView getEditComputer(@RequestParam(name = "computer", required = true) Long id) {
 		ModelAndView modelAndView = new ModelAndView("editComputer");
 		List<Company> companies = null;
-		Computer computer = null;
+		ComputerDTO computerDTO = null;
 		try {
 			companies = serviceCompany.getAllCompanies();
-			computer = serviceComputer.getOneComputer(id);
+			computerDTO =  serviceComputer.getOneComputer(id);
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		
-		ComputerDTO computerDTO = computerMapper.computerToDTO(computer);
 		modelAndView.addObject("listCompanies", companies);
 		modelAndView.addObject("computer", computerDTO);
 		return modelAndView;

@@ -2,10 +2,13 @@ package com.excilys.training.cbd.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,7 +22,12 @@ public class ComputerTable {
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
-	private Company company;
+	@Column(name = "company_id")
+	private Long companyId;
+	
+	@ManyToOne
+	@JoinColumn(name = "company_id", referencedColumnName = "id", insertable = false, updatable = false)
+	private CompanyTable company;
 	
 	
 	public Long getId() {
@@ -48,10 +56,16 @@ public class ComputerTable {
 	public void setDiscontinued(LocalDate discontinued) {
 		this.discontinued = discontinued;
 	}
-	public Company getCompany() {
+	public Long getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(Long company) {
+		this.companyId = company;
+	}
+	public CompanyTable getCompany() {
 		return company;
 	}
-	public void setCompany(Company company) {
+	public void setCompany(CompanyTable company) {
 		this.company = company;
 	}
 	
