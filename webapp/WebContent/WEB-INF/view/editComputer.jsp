@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: 0
+                        id: <c:out value="${ computer.id }" />
                     </div>
                     <h1>Edit Computer</h1>
 
@@ -63,7 +63,7 @@
                         <div class="actions pull-right">
                             <input type="submit" value="Edit" class="btn btn-primary">
                             or
-                            <a href="listComputers" class="btn btn-default">Cancel</a>
+                            <a href="/webapp/listComputers" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>

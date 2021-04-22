@@ -132,7 +132,7 @@ public class ListComputersController {
 	}
 
 	@GetMapping(value = "/editComputer")
-	public ModelAndView getEditComputer(@RequestParam(name = "computer", required = true) Long id) {
+	public ModelAndView getEditComputer(@RequestParam(name = "id", required = true) Long id) {
 		ModelAndView modelAndView = new ModelAndView("editComputer");
 		List<Company> companies = null;
 		ComputerDTO computerDTO = null;

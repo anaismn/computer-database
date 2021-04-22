@@ -10,6 +10,8 @@ public class ComputerDTO {
 	private String discontinued ;
 	private String company;
 
+	public ComputerDTO () {}
+	
 	public ComputerDTO(Long id, String name, String introduced, String discontinued, String company) {
 		this.id = id;
 		this.name = name;

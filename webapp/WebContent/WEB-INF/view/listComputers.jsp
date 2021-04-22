@@ -38,7 +38,7 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer"  href="/cbd-maven/addComputer">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer"  href="/webapp/addComputer">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                             <input type="checkbox" name="cb" class="cb" value="<c:out value="${ computer.id }"/>" >
                         </td>
                         <td>
-                            <a href="/cbd-maven/editComputer?computer=<c:out value="${ computer.id }"/>" onclick=""><c:out value="${ computer.name }"/></a>
+                            <a href="/webapp/editComputer?id=<c:out value="${ computer.id }"/>" onclick=""><c:out value="${ computer.name }"/></a>
                         </td>
                          <td><c:out value="${ computer.introduced }" /></td>
                         <td> <c:out value="${ computer.discontinued }" /> </td>
@@ -113,17 +113,17 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="/cbd-maven/listComputers?page=1" aria-label="Previous">
+                    <a href="/webapp/listComputers?page=1" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
               <c:forEach var="i" begin="1" end="5" step="1">
               	<c:if test= "${ fn:substringBefore( (pageNumber div 5), '.')*5 +i <= numberOfPages }" >
-              		<li><a href="/cbd-maven/listComputers?page=<c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i  }" />"><c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i }" /></a></li>
+              		<li><a href="/webapp/listComputers?page=<c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i  }" />"><c:out value="${ fn:substringBefore( (pageNumber div 5), '.')*5 +i }" /></a></li>
 			  	</c:if>
 			  </c:forEach>
               <li>
-                <a href="/listComputers?page=<c:out value="${ numberOfPages }" />" aria-label="Next">
+                <a href="/webapp/listComputers?page=<c:out value="${ numberOfPages }" />" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

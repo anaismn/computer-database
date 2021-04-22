@@ -37,7 +37,7 @@ public class ServiceCompany {
 		CompanyTable result = companyDao.getOneCompany(idSearched);
 		return companyMapper.tableToCompany(result);
 	}
-
+	
 	public void deleteCompany(Long idSearched) throws DAOException {
 		companyDao.deleteCompany(idSearched);
 	}

@@ -25,7 +25,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableWebMvc
 @EnableTransactionManagement
 @ComponentScan({ "com.excilys.training.service", "com.excilys.training.mapper",
-	"com.excilys.training.dao", "com.excilys.training.web", 
+	"com.excilys.training.dao", "com.excilys.training.web",  "com.excilys.training.jackson",
 	"com.excilys.training.model" })
 public class HibernateConfig implements WebMvcConfigurer {
 

@@ -59,7 +59,7 @@
                         <div id="add_submit" class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">
                             or
-                            <a href="listComputers" class="btn btn-default">Cancel</a>
+                            <a href="/webapp/listComputers" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>
